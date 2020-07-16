@@ -20,10 +20,11 @@ func arrayToString(a []int, delim string) string {
 }
 
 func getSettings(scanFlag string, s Scan) settings {
-	configuration := settings{}
-	configuration.scanFlag = scanFlag
-	configuration.portsFlag = "-p" + arrayToString(s.GetPorts(), ",")
-	configuration.hosts = strings.Join(s.GetHosts(), " ")
+	configuration := settings{
+		scanFlag:  scanFlag,
+		portsFlag: "-p" + arrayToString(s.GetPorts(), ","),
+		hosts:     strings.Join(s.GetHosts(), " "),
+	}
 
 	switch s.performance {
 	case 0:
