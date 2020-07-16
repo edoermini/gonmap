@@ -8,14 +8,35 @@ import (
 
 // Scan contains basic scan information: hosts list and ports list
 type Scan struct {
-	Hosts []Host
-	Ports []int
+	hosts       []string
+	ports       []int
+	performance int
+}
+
+// NewScan return new Scan
+func NewScan(hosts []string, ports []int, performance int) (Scan, error) {
+
+	if performance < 0 || performance > 5 {
+		return Scan{nil, nil, 0}, errors.New("Performance must be between 0 and 5")
+	}
+
+	if hosts == nil && ports == nil {
+		return Scan{[]string{}, []int{}, performance}, nil
+	}
+	if hosts == nil && ports != nil {
+		return Scan{[]string{}, ports, performance}, nil
+	}
+	if hosts != nil && ports == nil {
+		return Scan{hosts, []int{}, performance}, nil
+	}
+
+	return Scan{hosts, ports, performance}, nil
 }
 
 // AddHost add host h to Scan s
-func (s Scan) AddHost(h Host) (Scan, error) {
+func (s Scan) AddHost(h string) (Scan, error) {
 
-	if h == Host("") {
+	if h == "" {
 		return s, errors.New("Parameter must be a created Host")
 	}
 
@@ -24,7 +45,7 @@ func (s Scan) AddHost(h Host) (Scan, error) {
 
 	}
 
-	s.Hosts = append(s.Hosts, h)
+	s.hosts = append(s.hosts, h)
 	return s, nil
 }
 
@@ -34,9 +55,9 @@ func (s Scan) AddPort(p int) (Scan, error) {
 		return s, errors.New("Port parameter must be an integer between 0 and 65536")
 	}
 
-	s.Ports = append(s.Ports, p)
+	s.ports = append(s.ports, p)
 	return s, nil
-}
+} // TODO test
 
 // AddPortRange adds ports from min to max
 func (s Scan) AddPortRange(min int, max int) (Scan, error) {
@@ -49,34 +70,48 @@ func (s Scan) AddPortRange(min int, max int) (Scan, error) {
 	}
 
 	for p := min; p <= max; p++ {
-		s.Ports = append(s.Ports, p)
+		s.ports = append(s.ports, p)
 	}
 
 	return s, nil
-}
+} // TODO test
 
-// NewScan return new Scan
-func NewScan(hosts []Host, ports []int) Scan {
-
-	if hosts == nil && ports == nil {
-		return Scan{[]Host{}, []int{}}
-	}
-	if hosts == nil && ports != nil {
-		return Scan{[]Host{}, ports}
-	}
-	if hosts != nil && ports == nil {
-		return Scan{hosts, []int{}}
+// SetPerformance ...
+func (s Scan) SetPerformance(performance int) (Scan, error) {
+	if performance < 0 || performance > 5 {
+		return s, errors.New("Performance must be between 0 and 5")
 	}
 
-	return Scan{hosts, ports}
+	s.performance = performance
+	return s, nil
+} // TODO test
 
+// GetHosts return a copy of hosts slice
+func (s Scan) GetHosts() []string {
+	ret := make([]string, len(s.hosts))
+	copy(ret, s.hosts)
+
+	return ret
+} // TODO
+
+// GetPorts return a copy of ports slice
+func (s Scan) GetPorts() []int {
+	ret := make([]int, len(s.ports))
+	copy(ret, s.ports)
+
+	return ret
+} // TODO test
+
+// GetPerformance returns performance
+func (s Scan) GetPerformance() int {
+	return s.performance
 }
 
 func (s Scan) String() string {
-	return fmt.Sprintf("Scan{%v, %v}", s.Hosts, s.Ports)
+	return fmt.Sprintf("Scan{%v, %v}", s.hosts, s.ports)
 }
 
 // IsEqual cheks if two scans are equal
 func (s Scan) IsEqual(s1 Scan) bool {
-	return reflect.DeepEqual(s.Hosts, s1.Hosts) && reflect.DeepEqual(s.Ports, s1.Ports)
+	return reflect.DeepEqual(s.hosts, s1.hosts) && reflect.DeepEqual(s.ports, s1.ports)
 }
