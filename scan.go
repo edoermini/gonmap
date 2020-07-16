@@ -14,7 +14,7 @@ type Scan struct {
 }
 
 func HostCheck(h Host) bool {
-	ipRegex := `^(?:[0-9]{1,3}\.){3}[0-9]{1,3}$`
+	ipRegex := `^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$`
 	domainRegex := `^[a-zA-Z0-9][a-zA-Z0-9-_]{0,61}[a-zA-Z0-9]{0,1}\.([a-zA-Z]{1,6}|[a-zA-Z0-9-]{1,30}\.[a-zA-Z]{2,3})$`
 
 	ipMatched, err := regexp.MatchString(ipRegex, string(h))

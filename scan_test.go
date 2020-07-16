@@ -10,6 +10,7 @@ func TestHostCheck(t *testing.T) {
 	testSet := map[Host]bool{
 		Host("192.168.1.1"):true,
 		Host("255.255.255.255"):true,
+		Host("888.888.888.888"):false,
 		Host("192.2.3"):false,
 		Host("www.google.com"):true,
 		Host("google.com"):true,
