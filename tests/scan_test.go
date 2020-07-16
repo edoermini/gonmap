@@ -1,23 +1,24 @@
-package gonmap
+package gonmap_test
 
 import (
 	"testing"
+
+	. "github.com/MrRadix/gonmap"
 )
 
 func TestIsEqual(t *testing.T) {
 	var s1 Scan
 	var s2 Scan
 
-	s1 = Scan{[]string{"192.168.1.1"}, []int{}, 0}
-	s2 = Scan{[]string{"192.168.1.1", "google.com"}, []int{}, 0}
-	s1, _ = s1.AddHost("google.com")
+	s1, _ = NewScan([]string{"192.168.1.1", "google.com"}, []int{}, 5)
+	s2, _ = NewScan([]string{"192.168.1.1", "google.com"}, []int{}, 0)
 
 	if s1.IsEqual(s2) == false {
 		t.Errorf("Test: %s == %s, expected: %t, got: %t", s1, s2, true, false)
 	}
 
-	s1 = Scan{[]string{"192.168.1.1", "google.com"}, []int{}, 0}
-	s2 = Scan{[]string{"192.168.1.1", "google.com"}, []int{80}, 0}
+	s1, _ = NewScan([]string{"192.168.1.1", "google.com"}, []int{}, 5)
+	s2, _ = NewScan([]string{"192.168.1.1", "google.com"}, []int{80}, 0)
 
 	if s1.IsEqual(s2) == true {
 		t.Errorf("Test: %s == %s, expected: %t, got: %t", s1, s2, false, true)
@@ -26,11 +27,13 @@ func TestIsEqual(t *testing.T) {
 }
 
 func TestAddHost(t *testing.T) {
-	result, _ := NewScan(nil, nil, 0)
+	result, _ := NewScan(nil, nil, 5)
 
+	s1, _ := NewScan([]string{"192.168.1.1"}, []int{}, 5)
+	s2, _ := NewScan([]string{"192.168.1.1", "google.com"}, []int{}, 5)
 	testSet := map[string]Scan{
-		"192.168.1.1": Scan{[]string{"192.168.1.1"}, []int{}, 0},
-		"google.com":  Scan{[]string{"192.168.1.1", "google.com"}, []int{}, 0},
+		"192.168.1.1": s1,
+		"google.com":  s2,
 	}
 
 	for test, expected := range testSet {

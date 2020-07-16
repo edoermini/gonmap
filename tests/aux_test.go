@@ -1,6 +1,10 @@
-package gonmap
+package gonmap_test
 
-import "testing"
+import (
+	"testing"
+
+	. "github.com/MrRadix/gonmap"
+)
 
 func TestIsHost(t *testing.T) {
 	var result bool

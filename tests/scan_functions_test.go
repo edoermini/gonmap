@@ -1,6 +1,10 @@
-package gonmap
+package gonmap_test
 
-import "testing"
+import (
+	"testing"
+
+	. "github.com/MrRadix/gonmap"
+)
 
 func TestTCPScan(t *testing.T) {
 	scan, _ := NewScan(nil, nil, 5)
