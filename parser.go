@@ -3,7 +3,6 @@ package gonmap
 import (
 	"encoding/json"
 	"encoding/xml"
-	"fmt"
 	"log"
 )
 
@@ -61,21 +60,14 @@ func NmapXMLParse(xmlData []byte) map[string]interface{} {
 
 	xml.Unmarshal(xmlData, &data)
 
-	fmt.Println(data.Hosts[0].PortList.Ports[0].Status.State)
-
 	jsonData, err := json.Marshal(data)
 	if err != nil {
 		log.Fatal("Error json marshal")
 	}
 
-	fmt.Println(string(jsonData))
-
 	if err := json.Unmarshal(jsonData, &mapData); err != nil {
 		log.Fatal("Error json unmarshal")
 	}
-
-	fmt.Println()
-	fmt.Println(mapData)
 
 	return mapData
 }
