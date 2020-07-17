@@ -11,26 +11,64 @@ type Scan struct {
 	hosts       []string
 	ports       []int
 	performance int
+	versionScan bool
+}
+
+// NewInitScan returns a Scan object with default values
+func NewInitScan() Scan {
+	return Scan{
+		hosts:       []string{},
+		ports:       []int{},
+		performance: 4,
+		versionScan: false,
+	}
 }
 
 // NewScan return new Scan
-func NewScan(hosts []string, ports []int, performance int) (Scan, error) {
+func NewScan(hosts []string, ports []int, performance int, versionScan bool) (Scan, error) {
 
 	if performance < 0 || performance > 5 {
-		return Scan{nil, nil, 0}, errors.New("Performance must be between 0 and 5")
+		return Scan{nil, nil, 0, false}, errors.New("Performance must be between 0 and 5")
 	}
 
 	if hosts == nil && ports == nil {
-		return Scan{[]string{}, []int{}, performance}, nil
+		return Scan{[]string{}, []int{}, performance, versionScan}, nil
 	}
 	if hosts == nil && ports != nil {
-		return Scan{[]string{}, ports, performance}, nil
+		return Scan{[]string{}, ports, performance, versionScan}, nil
 	}
 	if hosts != nil && ports == nil {
-		return Scan{hosts, []int{}, performance}, nil
+		return Scan{hosts, []int{}, performance, versionScan}, nil
 	}
 
-	return Scan{hosts, ports, performance}, nil
+	return Scan{hosts, ports, performance, versionScan}, nil
+}
+
+// HasPort checks if Scan s has port p
+func (s Scan) HasPort(p int) bool {
+	for _, v := range s.ports {
+		if p == v {
+			return true
+		}
+	}
+
+	return false
+}
+
+// HasHost checks if Scan s has host h
+func (s Scan) HasHost(h string) bool {
+
+	if !IsHost(h) {
+		return false
+	}
+
+	for _, v := range s.hosts {
+		if h == v {
+			return true
+		}
+	}
+
+	return false
 }
 
 // AddHost add host h to Scan s
@@ -45,7 +83,32 @@ func (s Scan) AddHost(h string) (Scan, error) {
 
 	}
 
-	s.hosts = append(s.hosts, h)
+	if !s.HasHost(h) {
+		s.hosts = append(s.hosts, h)
+	}
+
+	return s, nil
+}
+
+// AddHosts add hosts slice to Scan s
+func (s Scan) AddHosts(hosts []string) (Scan, error) {
+
+	if hosts == nil {
+		return s, errors.New("Parameter must be a initialized slice")
+	}
+
+	for _, h := range hosts {
+		if !IsHost(h) {
+			return s, errors.New("Hosts mus be all valid")
+		}
+	}
+
+	for _, h := range hosts {
+		if !s.HasHost(h) {
+			s.hosts = append(s.hosts, h)
+		}
+	}
+
 	return s, nil
 }
 
@@ -55,7 +118,10 @@ func (s Scan) AddPort(p int) (Scan, error) {
 		return s, errors.New("Port parameter must be an integer between 0 and 65536")
 	}
 
-	s.ports = append(s.ports, p)
+	if !s.HasPort(p) {
+		s.ports = append(s.ports, p)
+	}
+
 	return s, nil
 } // TODO test
 
@@ -70,11 +136,29 @@ func (s Scan) AddPortRange(min int, max int) (Scan, error) {
 	}
 
 	for p := min; p <= max; p++ {
-		s.ports = append(s.ports, p)
+
+		if !s.HasPort(p) {
+			s.ports = append(s.ports, p)
+		}
 	}
 
 	return s, nil
 } // TODO test
+
+// AddPorts adds ports in ports slice to Scan s
+func (s Scan) AddPorts(ports []int) (Scan, error) {
+	if ports == nil {
+		return s, errors.New("Ports slice must be with with almost an element")
+	}
+
+	for _, p := range ports {
+		if !s.HasPort(p) {
+			s.ports = append(s.ports, p)
+		}
+	}
+
+	return s, nil
+}
 
 // SetPerformance ...
 func (s Scan) SetPerformance(performance int) (Scan, error) {
@@ -85,6 +169,12 @@ func (s Scan) SetPerformance(performance int) (Scan, error) {
 	s.performance = performance
 	return s, nil
 } // TODO test
+
+// SetVersionScan sets service version scan to choise
+func (s Scan) SetVersionScan(choise bool) Scan {
+	s.versionScan = choise
+	return s
+}
 
 // GetHosts return a copy of hosts slice
 func (s Scan) GetHosts() []string {

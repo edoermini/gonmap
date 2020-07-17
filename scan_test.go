@@ -8,15 +8,15 @@ func TestIsEqual(t *testing.T) {
 	var s1 Scan
 	var s2 Scan
 
-	s1, _ = NewScan([]string{"192.168.1.1", "google.com"}, []int{}, 5)
-	s2, _ = NewScan([]string{"192.168.1.1", "google.com"}, []int{}, 0)
+	s1, _ = NewScan([]string{"192.168.1.1", "google.com"}, []int{}, 5, true)
+	s2, _ = NewScan([]string{"192.168.1.1", "google.com"}, []int{}, 0, true)
 
 	if s1.IsEqual(s2) == false {
 		t.Errorf("Test: %s == %s, expected: %t, got: %t", s1, s2, true, false)
 	}
 
-	s1, _ = NewScan([]string{"192.168.1.1", "google.com"}, []int{}, 5)
-	s2, _ = NewScan([]string{"192.168.1.1", "google.com"}, []int{80}, 0)
+	s1, _ = NewScan([]string{"192.168.1.1", "google.com"}, []int{}, 5, true)
+	s2, _ = NewScan([]string{"192.168.1.1", "google.com"}, []int{80}, 0, true)
 
 	if s1.IsEqual(s2) == true {
 		t.Errorf("Test: %s == %s, expected: %t, got: %t", s1, s2, false, true)
@@ -25,10 +25,10 @@ func TestIsEqual(t *testing.T) {
 }
 
 func TestAddHost(t *testing.T) {
-	result, _ := NewScan(nil, nil, 5)
+	result, _ := NewScan(nil, nil, 5, true)
 
-	s1, _ := NewScan([]string{"192.168.1.1"}, []int{}, 5)
-	s2, _ := NewScan([]string{"192.168.1.1", "google.com"}, []int{}, 5)
+	s1, _ := NewScan([]string{"192.168.1.1"}, []int{}, 5, true)
+	s2, _ := NewScan([]string{"192.168.1.1", "google.com"}, []int{}, 5, true)
 
 	testSet := map[string]Scan{
 		"192.168.1.1": s1,
