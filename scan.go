@@ -6,7 +6,9 @@ import (
 	"reflect"
 )
 
-// Scan contains basic scan information: hosts list and ports list
+// Scan contains basic scan information like hosts, ports, performance of scan
+// and a flag for service version scan.
+// Is the base for every scan type
 type Scan struct {
 	hosts       []string
 	ports       []int
@@ -14,7 +16,7 @@ type Scan struct {
 	versionScan bool
 }
 
-// NewInitScan returns a Scan object with default values
+// NewInitScan returns a new Scan with default values
 func NewInitScan() Scan {
 	return Scan{
 		hosts:       []string{},
@@ -24,7 +26,8 @@ func NewInitScan() Scan {
 	}
 }
 
-// NewScan return new Scan
+// NewScan return a new Scan with given settings if they are valid
+// and returns error otherwise
 func NewScan(hosts []string, ports []int, performance int, versionScan bool) (Scan, error) {
 
 	if performance < 0 || performance > 5 {
@@ -35,10 +38,34 @@ func NewScan(hosts []string, ports []int, performance int, versionScan bool) (Sc
 		return Scan{[]string{}, []int{}, performance, versionScan}, nil
 	}
 	if hosts == nil && ports != nil {
+		for _, p := range ports {
+			if p < 1 && p > 65536 {
+				return Scan{nil, nil, 0, false}, errors.New("Port parameter must be an integer between 0 and 65536")
+			}
+		}
+
 		return Scan{[]string{}, ports, performance, versionScan}, nil
 	}
 	if hosts != nil && ports == nil {
+		for _, h := range hosts {
+			if !IsHost(h) {
+				return Scan{nil, nil, 0, false}, errors.New("Hosts mus be all valid")
+			}
+		}
+
 		return Scan{hosts, []int{}, performance, versionScan}, nil
+	}
+
+	for _, p := range ports {
+		if p < 1 && p > 65536 {
+			return Scan{nil, nil, 0, false}, errors.New("Port parameter must be an integer between 0 and 65536")
+		}
+	}
+
+	for _, h := range hosts {
+		if !IsHost(h) {
+			return Scan{nil, nil, 0, false}, errors.New("Hosts mus be all valid")
+		}
 	}
 
 	return Scan{hosts, ports, performance, versionScan}, nil
@@ -71,7 +98,8 @@ func (s Scan) HasHost(h string) bool {
 	return false
 }
 
-// AddHost add host h to Scan s
+// AddHost adds host h to Scan s if it's a valid host
+// and returns error otherwise
 func (s *Scan) AddHost(h string) error {
 
 	if h == "" {
@@ -90,7 +118,8 @@ func (s *Scan) AddHost(h string) error {
 	return nil
 }
 
-// AddHosts add hosts slice to Scan s
+// AddHosts adds hosts slice to Scan if all hosts are valid
+// and returns error otherwise
 func (s *Scan) AddHosts(hosts []string) error {
 
 	if hosts == nil {
@@ -112,7 +141,8 @@ func (s *Scan) AddHosts(hosts []string) error {
 	return nil
 }
 
-// AddPort adds port p to Scan s
+// AddPort adds port p to Scan s if p is a valid port
+// and returns error otherwise
 func (s *Scan) AddPort(p int) error {
 	if p < 0 || p > 65536 {
 		return errors.New("Port parameter must be an integer between 0 and 65536")
@@ -123,9 +153,10 @@ func (s *Scan) AddPort(p int) error {
 	}
 
 	return nil
-} // TODO test
+}
 
-// AddPortRange adds ports from min to max
+// AddPortRange adds ports from min to max if min and max are valid bounds
+// and returns error otherwise
 func (s *Scan) AddPortRange(min int, max int) error {
 	if min < 0 || min > 65536 {
 		return errors.New("Min parameter must be an integer between 0 and 65536")
@@ -133,6 +164,10 @@ func (s *Scan) AddPortRange(min int, max int) error {
 
 	if max < 0 || max > 65536 {
 		return errors.New("Max parameter must be an integer between 0 and 65536")
+	}
+
+	if min > max {
+		return errors.New("Max parameter must be bigger or equal to min parameter")
 	}
 
 	for p := min; p <= max; p++ {
@@ -143,12 +178,19 @@ func (s *Scan) AddPortRange(min int, max int) error {
 	}
 
 	return nil
-} // TODO test
+}
 
-// AddPorts adds ports in ports slice to Scan s
+// AddPorts adds ports in ports slice to Scan s if all ports are valid
+// and returns error otherwise
 func (s *Scan) AddPorts(ports []int) error {
 	if ports == nil {
-		return errors.New("Ports slice must be with with almost an element")
+		return errors.New("Ports slice must be with almost an element")
+	}
+
+	for _, p := range ports {
+		if p < 0 || p > 65536 {
+			return errors.New("All ports must be an integer between 0 and 65536")
+		}
 	}
 
 	for _, p := range ports {
@@ -160,7 +202,8 @@ func (s *Scan) AddPorts(ports []int) error {
 	return nil
 }
 
-// SetPerformance ...
+// SetPerformance sets scan performance if
+// performance parameter is an integer between 0 and 5
 func (s *Scan) SetPerformance(performance int) error {
 	if performance < 0 || performance > 5 {
 		return errors.New("Performance must be between 0 and 5")
@@ -168,22 +211,22 @@ func (s *Scan) SetPerformance(performance int) error {
 
 	s.performance = performance
 	return nil
-} // TODO test
+}
 
-// SetVersionScan sets service version scan to choise
+// SetVersionScan sets service version scan. Nmap flag: -sV
 func (s *Scan) SetVersionScan(choise bool) {
 	s.versionScan = choise
 }
 
-// GetHosts return a copy of hosts slice
+// GetHosts returns set hosts
 func (s Scan) GetHosts() []string {
 	ret := make([]string, len(s.hosts))
 	copy(ret, s.hosts)
 
 	return ret
-} // TODO
+}
 
-// GetPorts return a copy of ports slice
+// GetPorts returns set Ports
 func (s Scan) GetPorts() []int {
 	ret := make([]int, len(s.ports))
 	copy(ret, s.ports)

@@ -2,7 +2,6 @@ package gonmap
 
 import (
 	"fmt"
-	"testing"
 )
 
 func ExampleTCPScan() {
@@ -16,10 +15,12 @@ func ExampleTCPScan() {
 	if err != nil {
 		return
 	}
-	fmt.Println(out)
+
+	fmt.Println(out["hosts"].([]interface{})[0].(map[string]interface{})["ports"].(map[string]interface{})["ports"].([]interface{})[0].(map[string]interface{})["id"])
+	// Output: 80
 }
 
-func ExampleUDPScan(t *testing.T) {
+func ExampleUDPScan() {
 	scan := NewInitScan()
 	_ = scan.AddHost("google.com")
 	_ = scan.AddPort(80)
@@ -30,10 +31,12 @@ func ExampleUDPScan(t *testing.T) {
 	if err != nil {
 		return
 	}
-	fmt.Println(out)
+
+	fmt.Println(out["hosts"].([]interface{})[0].(map[string]interface{})["ports"].(map[string]interface{})["ports"].([]interface{})[0].(map[string]interface{})["id"])
+	// Output: 80
 }
 
-func ExampleSYNScan(t *testing.T) {
+func ExampleSYNScan() {
 	scan := NewInitScan()
 	_ = scan.AddHost("google.com")
 	_ = scan.AddPort(80)
@@ -44,10 +47,12 @@ func ExampleSYNScan(t *testing.T) {
 	if err != nil {
 		return
 	}
-	fmt.Println(out)
+
+	fmt.Println(out["hosts"].([]interface{})[0].(map[string]interface{})["ports"].(map[string]interface{})["ports"].([]interface{})[0].(map[string]interface{})["id"])
+	// Output: 80
 }
 
-func ExampleACKScan(t *testing.T) {
+func ExampleACKScan() {
 	scan := NewInitScan()
 	_ = scan.AddHost("google.com")
 	_ = scan.AddPort(80)
@@ -58,10 +63,12 @@ func ExampleACKScan(t *testing.T) {
 	if err != nil {
 		return
 	}
-	fmt.Println(out)
+
+	fmt.Println(out["hosts"].([]interface{})[0].(map[string]interface{})["ports"].(map[string]interface{})["ports"].([]interface{})[0].(map[string]interface{})["id"])
+	// Output: 80
 }
 
-func ExampleFINScan(t *testing.T) {
+func ExampleFINScan() {
 	scan := NewInitScan()
 	_ = scan.AddHost("google.com")
 	_ = scan.AddPort(80)
@@ -72,7 +79,9 @@ func ExampleFINScan(t *testing.T) {
 	if err != nil {
 		return
 	}
-	fmt.Println(out)
+
+	fmt.Println(out["hosts"].([]interface{})[0].(map[string]interface{})["ports"].(map[string]interface{})["ports"].([]interface{})[0].(map[string]interface{})["id"])
+	// Output: 80
 }
 
 func ExampleNULLScan() {
@@ -86,10 +95,12 @@ func ExampleNULLScan() {
 	if err != nil {
 		return
 	}
-	fmt.Println(out)
+
+	fmt.Println(out["hosts"].([]interface{})[0].(map[string]interface{})["ports"].(map[string]interface{})["ports"].([]interface{})[0].(map[string]interface{})["id"])
+	// Output: 80
 }
 
-func ExampleXMASScan(t *testing.T) {
+func ExampleXMASScan() {
 	scan := NewInitScan()
 	_ = scan.AddHost("google.com")
 	_ = scan.AddPort(80)
@@ -100,5 +111,7 @@ func ExampleXMASScan(t *testing.T) {
 	if err != nil {
 		return
 	}
-	fmt.Println(out)
+
+	fmt.Println(out["hosts"].([]interface{})[0].(map[string]interface{})["ports"].(map[string]interface{})["ports"].([]interface{})[0].(map[string]interface{})["id"])
+	// Output: 80
 }
