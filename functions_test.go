@@ -7,10 +7,10 @@ import (
 
 func ExampleTCPScan() {
 	scan := NewInitScan()
-	scan, _ = scan.AddHost("google.com")
-	scan, _ = scan.AddPort(80)
-	scan, _ = scan.SetPerformance(5)
-	scan = scan.SetVersionScan(false)
+	_ = scan.AddHost("google.com")
+	_ = scan.AddPort(80)
+	_ = scan.SetPerformance(5)
+	scan.SetVersionScan(false)
 
 	out, err := scan.TCPScan()
 	if err != nil {
@@ -21,10 +21,10 @@ func ExampleTCPScan() {
 
 func ExampleUDPScan(t *testing.T) {
 	scan := NewInitScan()
-	scan, _ = scan.AddHost("google.com")
-	scan, _ = scan.AddPort(80)
-	scan, _ = scan.SetPerformance(5)
-	scan = scan.SetVersionScan(false)
+	_ = scan.AddHost("google.com")
+	_ = scan.AddPort(80)
+	_ = scan.SetPerformance(5)
+	scan.SetVersionScan(false)
 
 	out, err := scan.UDPScan()
 	if err != nil {
@@ -35,10 +35,10 @@ func ExampleUDPScan(t *testing.T) {
 
 func ExampleSYNScan(t *testing.T) {
 	scan := NewInitScan()
-	scan, _ = scan.AddHost("google.com")
-	scan, _ = scan.AddPort(80)
-	scan, _ = scan.SetPerformance(5)
-	scan = scan.SetVersionScan(false)
+	_ = scan.AddHost("google.com")
+	_ = scan.AddPort(80)
+	_ = scan.SetPerformance(5)
+	scan.SetVersionScan(false)
 
 	out, err := scan.SYNScan()
 	if err != nil {
@@ -49,10 +49,10 @@ func ExampleSYNScan(t *testing.T) {
 
 func ExampleACKScan(t *testing.T) {
 	scan := NewInitScan()
-	scan, _ = scan.AddHost("google.com")
-	scan, _ = scan.AddPort(80)
-	scan, _ = scan.SetPerformance(5)
-	scan = scan.SetVersionScan(false)
+	_ = scan.AddHost("google.com")
+	_ = scan.AddPort(80)
+	_ = scan.SetPerformance(5)
+	scan.SetVersionScan(false)
 
 	out, err := scan.ACKScan()
 	if err != nil {
@@ -63,10 +63,10 @@ func ExampleACKScan(t *testing.T) {
 
 func ExampleFINScan(t *testing.T) {
 	scan := NewInitScan()
-	scan, _ = scan.AddHost("google.com")
-	scan, _ = scan.AddPort(80)
-	scan, _ = scan.SetPerformance(5)
-	scan = scan.SetVersionScan(false)
+	_ = scan.AddHost("google.com")
+	_ = scan.AddPort(80)
+	_ = scan.SetPerformance(5)
+	scan.SetVersionScan(false)
 
 	out, err := scan.FINScan()
 	if err != nil {
@@ -77,10 +77,10 @@ func ExampleFINScan(t *testing.T) {
 
 func ExampleNULLScan() {
 	scan := NewInitScan()
-	scan, _ = scan.AddHost("google.com")
-	scan, _ = scan.AddPort(80)
-	scan, _ = scan.SetPerformance(5)
-	scan = scan.SetVersionScan(false)
+	_ = scan.AddHost("google.com")
+	_ = scan.AddPort(80)
+	_ = scan.SetPerformance(5)
+	scan.SetVersionScan(false)
 
 	out, err := scan.NULLScan()
 	if err != nil {
@@ -91,10 +91,10 @@ func ExampleNULLScan() {
 
 func ExampleXMASScan(t *testing.T) {
 	scan := NewInitScan()
-	scan, _ = scan.AddHost("google.com")
-	scan, _ = scan.AddPort(80)
-	scan, _ = scan.SetPerformance(5)
-	scan = scan.SetVersionScan(false)
+	_ = scan.AddHost("google.com")
+	_ = scan.AddPort(80)
+	_ = scan.SetPerformance(5)
+	scan.SetVersionScan(false)
 
 	out, err := scan.XMASScan()
 	if err != nil {

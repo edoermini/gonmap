@@ -72,14 +72,14 @@ func (s Scan) HasHost(h string) bool {
 }
 
 // AddHost add host h to Scan s
-func (s Scan) AddHost(h string) (Scan, error) {
+func (s *Scan) AddHost(h string) error {
 
 	if h == "" {
-		return s, errors.New("Parameter must be a created Host")
+		return errors.New("Parameter must be a created Host")
 	}
 
 	if !IsHost(h) {
-		return s, errors.New("Parameter must be a valid Host")
+		return errors.New("Parameter must be a valid Host")
 
 	}
 
@@ -87,19 +87,19 @@ func (s Scan) AddHost(h string) (Scan, error) {
 		s.hosts = append(s.hosts, h)
 	}
 
-	return s, nil
+	return nil
 }
 
 // AddHosts add hosts slice to Scan s
-func (s Scan) AddHosts(hosts []string) (Scan, error) {
+func (s *Scan) AddHosts(hosts []string) error {
 
 	if hosts == nil {
-		return s, errors.New("Parameter must be a initialized slice")
+		return errors.New("Parameter must be a initialized slice")
 	}
 
 	for _, h := range hosts {
 		if !IsHost(h) {
-			return s, errors.New("Hosts mus be all valid")
+			return errors.New("Hosts mus be all valid")
 		}
 	}
 
@@ -109,30 +109,30 @@ func (s Scan) AddHosts(hosts []string) (Scan, error) {
 		}
 	}
 
-	return s, nil
+	return nil
 }
 
 // AddPort adds port p to Scan s
-func (s Scan) AddPort(p int) (Scan, error) {
+func (s *Scan) AddPort(p int) error {
 	if p < 0 || p > 65536 {
-		return s, errors.New("Port parameter must be an integer between 0 and 65536")
+		return errors.New("Port parameter must be an integer between 0 and 65536")
 	}
 
 	if !s.HasPort(p) {
 		s.ports = append(s.ports, p)
 	}
 
-	return s, nil
+	return nil
 } // TODO test
 
 // AddPortRange adds ports from min to max
-func (s Scan) AddPortRange(min int, max int) (Scan, error) {
+func (s *Scan) AddPortRange(min int, max int) error {
 	if min < 0 || min > 65536 {
-		return s, errors.New("Min parameter must be an integer between 0 and 65536")
+		return errors.New("Min parameter must be an integer between 0 and 65536")
 	}
 
 	if max < 0 || max > 65536 {
-		return s, errors.New("Max parameter must be an integer between 0 and 65536")
+		return errors.New("Max parameter must be an integer between 0 and 65536")
 	}
 
 	for p := min; p <= max; p++ {
@@ -142,13 +142,13 @@ func (s Scan) AddPortRange(min int, max int) (Scan, error) {
 		}
 	}
 
-	return s, nil
+	return nil
 } // TODO test
 
 // AddPorts adds ports in ports slice to Scan s
-func (s Scan) AddPorts(ports []int) (Scan, error) {
+func (s *Scan) AddPorts(ports []int) error {
 	if ports == nil {
-		return s, errors.New("Ports slice must be with with almost an element")
+		return errors.New("Ports slice must be with with almost an element")
 	}
 
 	for _, p := range ports {
@@ -157,23 +157,22 @@ func (s Scan) AddPorts(ports []int) (Scan, error) {
 		}
 	}
 
-	return s, nil
+	return nil
 }
 
 // SetPerformance ...
-func (s Scan) SetPerformance(performance int) (Scan, error) {
+func (s *Scan) SetPerformance(performance int) error {
 	if performance < 0 || performance > 5 {
-		return s, errors.New("Performance must be between 0 and 5")
+		return errors.New("Performance must be between 0 and 5")
 	}
 
 	s.performance = performance
-	return s, nil
+	return nil
 } // TODO test
 
 // SetVersionScan sets service version scan to choise
-func (s Scan) SetVersionScan(choise bool) Scan {
+func (s *Scan) SetVersionScan(choise bool) {
 	s.versionScan = choise
-	return s
 }
 
 // GetHosts return a copy of hosts slice

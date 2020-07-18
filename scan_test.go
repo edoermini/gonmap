@@ -36,7 +36,7 @@ func TestAddHost(t *testing.T) {
 	}
 
 	for test, expected := range testSet {
-		result, _ = result.AddHost(test)
+		_ = result.AddHost(test)
 
 		t.Log(result.IsEqual(expected))
 
