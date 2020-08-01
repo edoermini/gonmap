@@ -101,7 +101,7 @@ func runScan(config settings) ([]byte, error) {
 // TCPScan makes a tcp connect scan; namp flag: -sT.
 // A TCP scan is generally used to check and complete a three-way handshake
 // between you and a chosen target system.
-func (s Scan) TCPScan() (map[string]interface{}, error) {
+func (s Scan) TCPScan() (NmapRun, error) {
 
 	config := getSettings(s)
 	config.scanFlag = "-sT"
@@ -118,7 +118,8 @@ func (s Scan) TCPScan() (map[string]interface{}, error) {
 // UDPScan makes a udp scan; nmap flag: -sU.
 // UDP scans are used to check whether there is any UDP port up and
 // listening for incoming requests on the target machine.
-func (s Scan) UDPScan() (map[string]interface{}, error) {
+func (s Scan) UDPScan() (NmapRun, error) {
+
 	config := getSettings(s)
 	config.scanFlag = "-sU"
 
@@ -133,7 +134,8 @@ func (s Scan) UDPScan() (map[string]interface{}, error) {
 // SYNScan makes a tcp syn scan; nmap flag: -sS.
 // This is another form of TCP scan. The difference is unlike a normal TCP scan, nmap itself crafts a syn packet,
 // which is the first packet that is sent to establish a TCP connection.
-func (s Scan) SYNScan() (map[string]interface{}, error) {
+func (s Scan) SYNScan() (NmapRun, error) {
+
 	config := getSettings(s)
 	config.scanFlag = "-sS"
 
@@ -148,7 +150,8 @@ func (s Scan) SYNScan() (map[string]interface{}, error) {
 
 // ACKScan makes an ack scan; nmap flag: -sA.
 // ACK scans are used to determine whether a particular port is filtered or not.
-func (s Scan) ACKScan() (map[string]interface{}, error) {
+func (s Scan) ACKScan() (NmapRun, error) {
+
 	config := getSettings(s)
 	config.scanFlag = "-sA"
 
@@ -162,7 +165,8 @@ func (s Scan) ACKScan() (map[string]interface{}, error) {
 
 // FINScan makes a fin scan; nmap flag: -sF.
 // Like the SYN scan, but sends a TCP FIN packet instead.
-func (s Scan) FINScan() (map[string]interface{}, error) {
+func (s Scan) FINScan() (NmapRun, error) {
+
 	config := getSettings(s)
 	config.scanFlag = "-sF"
 
@@ -177,7 +181,8 @@ func (s Scan) FINScan() (map[string]interface{}, error) {
 // NULLScan makes a null scan; nmap flag: -sN.
 // Null scans are extremely stealthy scan and what they do
 // is as the name suggests — they set all the header fields to null.
-func (s Scan) NULLScan() (map[string]interface{}, error) {
+func (s Scan) NULLScan() (NmapRun, error) {
+
 	config := getSettings(s)
 	config.scanFlag = "-sN"
 
@@ -191,7 +196,8 @@ func (s Scan) NULLScan() (map[string]interface{}, error) {
 
 // XMASScan makes a xmas scan; nmap flag: -sX.
 // Just like null scans, these are also stealthy in nature.
-func (s Scan) XMASScan() (map[string]interface{}, error) {
+func (s Scan) XMASScan() (NmapRun, error) {
+
 	config := getSettings(s)
 	config.scanFlag = "-sX"
 
@@ -205,9 +211,10 @@ func (s Scan) XMASScan() (map[string]interface{}, error) {
 
 // IDLEScan makes a idle scan; nmap flag: -sI.
 // IDLE scan is the stealthiest of all scans as the packets are bounced off an external host.
-func (s Scan) IDLEScan(zombie string) (map[string]interface{}, error) {
+func (s Scan) IDLEScan(zombie string) (NmapRun, error) {
+
 	if !IsHost(zombie) {
-		return nil, errors.New("Zombie target must be a valid host")
+		return NmapRun{}, errors.New("Zombie target must be a valid host")
 	}
 
 	config := getSettings(s)
@@ -216,11 +223,11 @@ func (s Scan) IDLEScan(zombie string) (map[string]interface{}, error) {
 	// Finds nmap binary path
 	nmap, err := exec.LookPath("nmap")
 	if err != nil {
-		return nil, err
+		return NmapRun{}, err
 	}
 
 	if config.hosts == "" {
-		return nil, errors.New("Must be present at least one host")
+		return NmapRun{}, errors.New("Must be present at least one host")
 	}
 
 	cmd := exec.Command(nmap, "-oX", "-", "-vvvvv", config.performance, config.scanFlag, zombie, config.portsFlag, config.versionScan, config.hosts)
@@ -228,32 +235,32 @@ func (s Scan) IDLEScan(zombie string) (map[string]interface{}, error) {
 	// Configure output pipes
 	errPipe, err := cmd.StderrPipe()
 	if err != nil {
-		return nil, err
+		return NmapRun{}, err
 	}
 
 	outPipe, err := cmd.StdoutPipe()
 	if err != nil {
-		return nil, err
+		return NmapRun{}, err
 	}
 
 	// Start command
 	if err := cmd.Start(); err != nil {
-		return nil, err
+		return NmapRun{}, err
 	}
 
 	stdout, err := ioutil.ReadAll(outPipe)
 	if err != nil {
-		return nil, err
+		return NmapRun{}, err
 	}
 
 	stderr, err := ioutil.ReadAll(errPipe)
 	if err != nil {
-		return nil, err
+		return NmapRun{}, err
 	}
 
 	// Waits nmap command
 	if err := cmd.Wait(); err != nil {
-		return nil, errors.New(err.Error() + "\n" + string(stderr))
+		return NmapRun{}, errors.New(err.Error() + "\n" + string(stderr))
 	}
 
 	return NmapXMLParse(stdout), nil

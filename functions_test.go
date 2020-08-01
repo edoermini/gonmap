@@ -16,7 +16,7 @@ func ExampleTCPScan() {
 		return
 	}
 
-	fmt.Println(out["hosts"].([]interface{})[0].(map[string]interface{})["ports"].(map[string]interface{})["ports"].([]interface{})[0].(map[string]interface{})["id"])
+	fmt.Println(out.Hosts[0].PortList.Port[0].ID)
 	// Output: 80
 }
 
@@ -32,7 +32,7 @@ func ExampleUDPScan() {
 		return
 	}
 
-	fmt.Println(out["hosts"].([]interface{})[0].(map[string]interface{})["ports"].(map[string]interface{})["ports"].([]interface{})[0].(map[string]interface{})["id"])
+	fmt.Println(out.Hosts[0].PortList.Port[0].ID)
 	// Output: 80
 }
 
@@ -48,7 +48,7 @@ func ExampleSYNScan() {
 		return
 	}
 
-	fmt.Println(out["hosts"].([]interface{})[0].(map[string]interface{})["ports"].(map[string]interface{})["ports"].([]interface{})[0].(map[string]interface{})["id"])
+	fmt.Println(out.Hosts[0].PortList.Port[0].ID)
 	// Output: 80
 }
 
@@ -64,7 +64,7 @@ func ExampleACKScan() {
 		return
 	}
 
-	fmt.Println(out["hosts"].([]interface{})[0].(map[string]interface{})["ports"].(map[string]interface{})["ports"].([]interface{})[0].(map[string]interface{})["id"])
+	fmt.Println(out.Hosts[0].PortList.Port[0].ID)
 	// Output: 80
 }
 
@@ -80,7 +80,7 @@ func ExampleFINScan() {
 		return
 	}
 
-	fmt.Println(out["hosts"].([]interface{})[0].(map[string]interface{})["ports"].(map[string]interface{})["ports"].([]interface{})[0].(map[string]interface{})["id"])
+	fmt.Println(out.Hosts[0].PortList.Port[0].ID)
 	// Output: 80
 }
 
@@ -96,7 +96,7 @@ func ExampleNULLScan() {
 		return
 	}
 
-	fmt.Println(out["hosts"].([]interface{})[0].(map[string]interface{})["ports"].(map[string]interface{})["ports"].([]interface{})[0].(map[string]interface{})["id"])
+	fmt.Println(out.Hosts[0].PortList.Port[0].ID)
 	// Output: 80
 }
 
@@ -112,6 +112,6 @@ func ExampleXMASScan() {
 		return
 	}
 
-	fmt.Println(out["hosts"].([]interface{})[0].(map[string]interface{})["ports"].(map[string]interface{})["ports"].([]interface{})[0].(map[string]interface{})["id"])
+	fmt.Println(out.Hosts[0].PortList.Port[0].ID)
 	// Output: 80
 }
