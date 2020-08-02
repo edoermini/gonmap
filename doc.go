@@ -1,8 +1,6 @@
 /*
 Package gonmap provides an efficient and simple API for nmap
 
-Nmap binary it's required for module work, download it from https://nmap.org/download.html
-
 For every scan it's necessary define a scan with:
 
 	scan := NewInitScan()
