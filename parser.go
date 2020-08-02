@@ -76,6 +76,7 @@ type OsMatch struct {
 // Script contains info about a specific script launched against a specific port
 type Script struct {
 	ID     string  `xml:"id,attr" json:"id"`
+	Output string  `xml:"output,attr" json:"output"`
 	Elems  []Elem  `xml:"elem" json:"elems"`
 	Tables []Table `xml:"table" json:"tables"`
 }

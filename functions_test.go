@@ -9,6 +9,7 @@ func ExampleTCPScan() {
 	_ = scan.AddHost("127.0.0.1")
 	_ = scan.AddPort(80)
 	_ = scan.SetPerformance(5)
+	scan.AddScript("http-enum")
 
 	out, err := scan.TCPScan()
 	if err != nil {
