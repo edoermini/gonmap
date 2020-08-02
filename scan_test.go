@@ -56,8 +56,6 @@ func TestAddHost(t *testing.T) {
 	for test, expected := range testSet {
 		_ = result.AddHost(test)
 
-		t.Log(result.IsEqual(expected))
-
 		if !result.IsEqual(expected) {
 			t.Errorf("Test: %s, expected: %s, got: %s", test, expected, result)
 		}
