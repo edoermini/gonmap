@@ -30,11 +30,7 @@ jobs:
             dep ensure
         fi
 
-        wget https://nmap.org/dist/nmap-7.80.tar.bz2
-        cd nmap-7.80
-        ./configure
-        make
-        echo "::add-path::./nmap"
+        sudo apt install nmap
 
     - name: Build
       run: go build -v .
