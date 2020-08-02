@@ -70,7 +70,7 @@ func getSettings(s Scan) settings {
 		if len(s.scripts) == 0 {
 			configuration.scripts = "-sC"
 		} else {
-			configuration.scripts = "--scripts=" + strings.Join(s.scripts, ",")
+			configuration.scripts = "--script=" + strings.Join(s.scripts, ",")
 		}
 	}
 
@@ -96,6 +96,7 @@ func runScan(config settings) ([]byte, error) {
 		config.osDetection,
 		config.scanFlag,
 		config.portsFlag,
+		config.scripts,
 		config.hosts,
 	)
 
@@ -129,6 +130,8 @@ func runScan(config settings) ([]byte, error) {
 	if err := cmd.Wait(); err != nil {
 		return nil, errors.New(err.Error() + "\n" + string(stderr))
 	}
+
+	fmt.Println(string(stdout))
 
 	return stdout, nil
 }
