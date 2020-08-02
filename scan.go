@@ -275,5 +275,11 @@ func (s Scan) String() string {
 
 // IsEqual cheks if two scans are equal
 func (s Scan) IsEqual(s1 Scan) bool {
-	return reflect.DeepEqual(s.hosts, s1.hosts) && reflect.DeepEqual(s.ports, s1.ports)
+	return reflect.DeepEqual(s.hosts, s1.hosts) &&
+		reflect.DeepEqual(s.ports, s1.ports) &&
+		reflect.DeepEqual(s.scripts, s1.scripts) &&
+		s.runScripts == s1.runScripts &&
+		s.performance == s1.performance &&
+		s.osDetection == s1.osDetection &&
+		s.versionScan == s1.versionScan
 }

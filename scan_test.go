@@ -44,13 +44,9 @@ func TestAddHost(t *testing.T) {
 
 	s1 := NewScan()
 	_ = s1.AddHosts([]string{"192.168.1.1"})
-	_ = s1.SetPerformance(5)
-	s1.SetVersionScan(true)
 
 	s2 := NewScan()
 	_ = s2.AddHosts([]string{"192.168.1.1", "google.com"})
-	_ = s2.SetPerformance(5)
-	s2.SetVersionScan(true)
 
 	testSet := map[string]Scan{
 		"192.168.1.1": s1,
