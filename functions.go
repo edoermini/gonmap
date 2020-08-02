@@ -131,8 +131,6 @@ func runScan(config settings) ([]byte, error) {
 		return nil, errors.New(err.Error() + "\n" + string(stderr))
 	}
 
-	fmt.Println(string(stdout))
-
 	return stdout, nil
 }
 
