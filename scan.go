@@ -14,6 +14,7 @@ type Scan struct {
 	ports       []int
 	performance int
 	versionScan bool
+	osDetection bool
 }
 
 // NewInitScan returns a new Scan with default values
@@ -23,52 +24,53 @@ func NewInitScan() Scan {
 		ports:       []int{},
 		performance: 4,
 		versionScan: false,
+		osDetection: false,
 	}
 }
 
 // NewScan return a new Scan with given settings if they are valid
 // and returns error otherwise
-func NewScan(hosts []string, ports []int, performance int, versionScan bool) (Scan, error) {
+func NewScan(hosts []string, ports []int, performance int, versionScan bool, osDetection bool) (Scan, error) {
 
 	if performance < 0 || performance > 5 {
-		return Scan{nil, nil, 0, false}, errors.New("Performance must be between 0 and 5")
+		return Scan{nil, nil, 0, false, false}, errors.New("Performance must be between 0 and 5")
 	}
 
 	if hosts == nil && ports == nil {
-		return Scan{[]string{}, []int{}, performance, versionScan}, nil
+		return Scan{[]string{}, []int{}, performance, versionScan, osDetection}, nil
 	}
 	if hosts == nil && ports != nil {
 		for _, p := range ports {
 			if p < 1 && p > 65536 {
-				return Scan{nil, nil, 0, false}, errors.New("Port parameter must be an integer between 0 and 65536")
+				return Scan{nil, nil, 0, false, false}, errors.New("Port parameter must be an integer between 0 and 65536")
 			}
 		}
 
-		return Scan{[]string{}, ports, performance, versionScan}, nil
+		return Scan{[]string{}, ports, performance, versionScan, osDetection}, nil
 	}
 	if hosts != nil && ports == nil {
 		for _, h := range hosts {
 			if !IsHost(h) {
-				return Scan{nil, nil, 0, false}, errors.New("Hosts mus be all valid")
+				return Scan{nil, nil, 0, false, false}, errors.New("Hosts mus be all valid")
 			}
 		}
 
-		return Scan{hosts, []int{}, performance, versionScan}, nil
+		return Scan{hosts, []int{}, performance, versionScan, osDetection}, nil
 	}
 
 	for _, p := range ports {
 		if p < 1 && p > 65536 {
-			return Scan{nil, nil, 0, false}, errors.New("Port parameter must be an integer between 0 and 65536")
+			return Scan{nil, nil, 0, false, false}, errors.New("Port parameter must be an integer between 0 and 65536")
 		}
 	}
 
 	for _, h := range hosts {
 		if !IsHost(h) {
-			return Scan{nil, nil, 0, false}, errors.New("Hosts mus be all valid")
+			return Scan{nil, nil, 0, false, false}, errors.New("Hosts mus be all valid")
 		}
 	}
 
-	return Scan{hosts, ports, performance, versionScan}, nil
+	return Scan{hosts, ports, performance, versionScan, osDetection}, nil
 }
 
 // HasPort checks if Scan s has port p
@@ -218,7 +220,12 @@ func (s *Scan) SetVersionScan(choise bool) {
 	s.versionScan = choise
 }
 
-// GetHosts returns set hosts
+// SetOsDetection sets operative system detection flag if choise is true. Nmap flag: -O
+func (s *Scan) SetOsDetection(choise bool) {
+	s.osDetection = choise
+}
+
+// GetHosts returns hosts set
 func (s Scan) GetHosts() []string {
 	ret := make([]string, len(s.hosts))
 	copy(ret, s.hosts)
@@ -226,7 +233,7 @@ func (s Scan) GetHosts() []string {
 	return ret
 }
 
-// GetPorts returns set Ports
+// GetPorts returns ports set
 func (s Scan) GetPorts() []int {
 	ret := make([]int, len(s.ports))
 	copy(ret, s.ports)
@@ -237,6 +244,11 @@ func (s Scan) GetPorts() []int {
 // GetPerformance returns performance
 func (s Scan) GetPerformance() int {
 	return s.performance
+}
+
+// GetOsDetection returns os detection choise
+func (s *Scan) GetOsDetection() bool {
+	return s.osDetection
 }
 
 func (s Scan) String() string {

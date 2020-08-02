@@ -15,6 +15,7 @@ type settings struct {
 	hosts       string
 	performance string
 	versionScan string
+	osDetection string
 }
 
 func arrayToString(a []int, delim string) string {
@@ -22,12 +23,22 @@ func arrayToString(a []int, delim string) string {
 }
 
 func getSettings(s Scan) settings {
+
 	configuration := settings{
-		portsFlag:   "-p" + arrayToString(s.GetPorts(), ","),
+		portsFlag:   "",
 		hosts:       strings.Join(s.GetHosts(), " "),
 		versionScan: "",
+		osDetection: "",
 	}
 
+	// adds ports flag to configuration
+	if len(s.ports) == 0 {
+		configuration.portsFlag = ""
+	} else {
+		configuration.portsFlag = "-p" + arrayToString(s.ports, ",")
+	}
+
+	// adds performance flag to configuration
 	switch s.performance {
 	case 0:
 		configuration.performance = "-T0"
@@ -43,8 +54,14 @@ func getSettings(s Scan) settings {
 		configuration.performance = "-T5"
 	}
 
+	// adds version scan flag to configuration
 	if s.versionScan {
 		configuration.versionScan = "-sV"
+	}
+
+	// adds os detection to configuration
+	if s.osDetection {
+		configuration.osDetection = "-O"
 	}
 
 	return configuration
@@ -62,7 +79,15 @@ func runScan(config settings) ([]byte, error) {
 		return nil, errors.New("Must be present at least one host")
 	}
 
-	cmd := exec.Command(nmap, "-oX", "-", "-vvvvv", config.performance, config.scanFlag, config.portsFlag, config.versionScan, config.hosts)
+	cmd := exec.Command(
+		nmap, "-oX", "-", "-vvvvv",
+		config.performance,
+		config.versionScan,
+		config.osDetection,
+		config.scanFlag,
+		config.portsFlag,
+		config.hosts,
+	)
 
 	// Configure output pipes
 	errPipe, err := cmd.StderrPipe()
@@ -196,10 +221,42 @@ func (s Scan) NULLScan() (NmapRun, error) {
 
 // XMASScan makes a xmas scan; nmap flag: -sX.
 // Just like null scans, these are also stealthy in nature.
-func (s Scan) XMASScan() (NmapRun, error) {
+func (s Scan) XmasScan() (NmapRun, error) {
 
 	config := getSettings(s)
 	config.scanFlag = "-sX"
+
+	xml, err := runScan(config)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	return NmapXMLParse(xml), nil
+}
+
+// WindowScan makes a window scan; nmap flag: -sW
+// Is exactly the same as ACK scan except that it exploits
+// an implementation detail of certain systems to differentiate open ports
+// from closed ones, rather than always printing unfiltered when a RST is returned.
+func (s Scan) WindowScan() (NmapRun, error) {
+
+	config := getSettings(s)
+	config.scanFlag = "-sW"
+
+	xml, err := runScan(config)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	return NmapXMLParse(xml), nil
+}
+
+// MaimonScan makes a maimon scan; flag: -sM
+// Is exactly the same as NULL, FIN, and Xmas scan, except that the probe is FIN/ACK.
+func (s Scan) MaimonScan() (NmapRun, error) {
+
+	config := getSettings(s)
+	config.scanFlag = "-sW"
 
 	xml, err := runScan(config)
 	if err != nil {

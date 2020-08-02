@@ -18,6 +18,7 @@ type Host struct {
 	Status   HostStatus `xml:"status" json:"status"`
 	Address  Address    `xml:"address" json:"address"`
 	PortList Port       `xml:"ports" json:"ports"`
+	OsInfo   OsInfo     `xml:"os" json:"osinfo"`
 }
 
 type HostStatus struct {
@@ -35,8 +36,8 @@ type Port struct {
 }
 
 type PortInfo struct {
-	Protocol string    `xml:"protocol,attr" json:"protocol"`
 	ID       int       `xml:"portid,attr" json:"id"`
+	Protocol string    `xml:"protocol,attr" json:"protocol"`
 	Status   PortState `xml:"state" json:"status"`
 	Service  Service   `xml:"service" json:"service"`
 }
@@ -51,7 +52,16 @@ type Service struct {
 	Version string `xml:"product,attr" json:"version"`
 }
 
-// NmapXMLParse return map from xml nmap output
+type OsInfo struct {
+	OsMatch []OsMatch `xml:"osmatch" json:"osmatch"`
+}
+
+type OsMatch struct {
+	Name     string `xml:"name,attr" json:"name"`
+	Accuracy string `xml:"accuracy,attr" json:"accuracy"`
+}
+
+// NmapXMLParse returns an NmapRun from xml nmap output
 func NmapXMLParse(xmlData []byte) NmapRun {
 	var data NmapRun
 
