@@ -29,7 +29,7 @@ import (
 )
 
 func main() {
-	scan := gonmap.NewInitScan()
+	scan := gonmap.Scan()
 
 	if err := scan.AddHost("github.com"); err != nil {
 		log.Fatal(err)
@@ -240,7 +240,7 @@ func NewScan() Scan
 
 NewScan returns a new Scan with default values
 
-### func \(Scan\) [ACKScan](<https://github.com/MrRadix/gonmap/blob/master/functions.go#L187>)
+### func \(Scan\) [ACKScan](<https://github.com/MrRadix/gonmap/blob/master/functions.go#L185>)
 
 ```go
 func (s Scan) ACKScan() (NmapRun, error)
@@ -304,7 +304,7 @@ func (s *Scan) AddScripts(scripts []string) error
 
 AddScripts adds all given scripts to scan
 
-### func \(Scan\) [AggressiveScan](<https://github.com/MrRadix/gonmap/blob/master/functions.go#L332>)
+### func \(Scan\) [AggressiveScan](<https://github.com/MrRadix/gonmap/blob/master/functions.go#L330>)
 
 ```go
 func (s Scan) AggressiveScan() (NmapRun, error)
@@ -312,7 +312,7 @@ func (s Scan) AggressiveScan() (NmapRun, error)
 
 AggressiveScan makes a scan with version scan \(\-sV\)\, os detection \(\-O\)\, script scanning \(\-sC\) and traceroute
 
-### func \(Scan\) [FINScan](<https://github.com/MrRadix/gonmap/blob/master/functions.go#L201>)
+### func \(Scan\) [FINScan](<https://github.com/MrRadix/gonmap/blob/master/functions.go#L199>)
 
 ```go
 func (s Scan) FINScan() (NmapRun, error)
@@ -384,7 +384,7 @@ func (s Scan) HasScript(script string) bool
 
 HasScript checks if scan has given script
 
-### func \(Scan\) [IDLEScan](<https://github.com/MrRadix/gonmap/blob/master/functions.go#L276>)
+### func \(Scan\) [IDLEScan](<https://github.com/MrRadix/gonmap/blob/master/functions.go#L274>)
 
 ```go
 func (s Scan) IDLEScan(zombie string) (NmapRun, error)
@@ -400,7 +400,7 @@ func (s Scan) IsEqual(s1 Scan) bool
 
 IsEqual cheks if two scans are equal
 
-### func \(Scan\) [MaimonScan](<https://github.com/MrRadix/gonmap/blob/master/functions.go#L261>)
+### func \(Scan\) [MaimonScan](<https://github.com/MrRadix/gonmap/blob/master/functions.go#L259>)
 
 ```go
 func (s Scan) MaimonScan() (NmapRun, error)
@@ -408,7 +408,7 @@ func (s Scan) MaimonScan() (NmapRun, error)
 
 MaimonScan is exactly the same as NULL\, FIN\, and Xmas scan\, except that the probe is FIN/ACK\. Flag: \-sM
 
-### func \(Scan\) [NULLScan](<https://github.com/MrRadix/gonmap/blob/master/functions.go#L216>)
+### func \(Scan\) [NULLScan](<https://github.com/MrRadix/gonmap/blob/master/functions.go#L214>)
 
 ```go
 func (s Scan) NULLScan() (NmapRun, error)
@@ -424,7 +424,7 @@ func (s *Scan) RunScripts(choise bool)
 
 RunScripts sets scripts running if choise is true\. Setting this true without adding scripts it's equivalent to a scan with default scripts\. Flag: \-sC
 
-### func \(Scan\) [SYNScan](<https://github.com/MrRadix/gonmap/blob/master/functions.go#L172>)
+### func \(Scan\) [SYNScan](<https://github.com/MrRadix/gonmap/blob/master/functions.go#L170>)
 
 ```go
 func (s Scan) SYNScan() (NmapRun, error)
@@ -462,7 +462,7 @@ SetVersionScan sets service version scan\. Nmap flag: \-sV
 func (s Scan) String() string
 ```
 
-### func \(Scan\) [TCPScan](<https://github.com/MrRadix/gonmap/blob/master/functions.go#L141>)
+### func \(Scan\) [TCPScan](<https://github.com/MrRadix/gonmap/blob/master/functions.go#L139>)
 
 ```go
 func (s Scan) TCPScan() (NmapRun, error)
@@ -470,7 +470,7 @@ func (s Scan) TCPScan() (NmapRun, error)
 
 TCPScan is generally used to check and complete a three\-way handshake between you and a chosen target system\. Flag: \-sT
 
-### func \(Scan\) [UDPScan](<https://github.com/MrRadix/gonmap/blob/master/functions.go#L157>)
+### func \(Scan\) [UDPScan](<https://github.com/MrRadix/gonmap/blob/master/functions.go#L155>)
 
 ```go
 func (s Scan) UDPScan() (NmapRun, error)
@@ -478,7 +478,7 @@ func (s Scan) UDPScan() (NmapRun, error)
 
 UDPScan are used to check whether there is any UDP port up and listening for incoming requests on the target machine\. Flag: \-sU
 
-### func \(Scan\) [WindowScan](<https://github.com/MrRadix/gonmap/blob/master/functions.go#L246>)
+### func \(Scan\) [WindowScan](<https://github.com/MrRadix/gonmap/blob/master/functions.go#L244>)
 
 ```go
 func (s Scan) WindowScan() (NmapRun, error)
@@ -486,7 +486,7 @@ func (s Scan) WindowScan() (NmapRun, error)
 
 WindowScan is exactly the same as ACK scan except that it exploits an implementation detail of certain systems to differentiate open ports from closed ones\, rather than always printing unfiltered when a RST is returned\. Flag: \-sW
 
-### func \(Scan\) [XmasScan](<https://github.com/MrRadix/gonmap/blob/master/functions.go#L230>)
+### func \(Scan\) [XmasScan](<https://github.com/MrRadix/gonmap/blob/master/functions.go#L228>)
 
 ```go
 func (s Scan) XmasScan() (NmapRun, error)
