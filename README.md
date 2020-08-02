@@ -6,7 +6,7 @@
 import "github.com/MrRadix/gonmap"
 ```
 
-### Package gonmap provides an efficient API to interface go programs with nmap binary
+### Package gonmap provides an efficient API that interfaces go programs with nmap binary
 
 For every scan it's necessary define a scan with:
 
@@ -17,7 +17,7 @@ scan := NewInitScan()
 and populate it with related functions or directly with:
 
 ```
-scan, err := NewScan([]string{"host1", "host2", ...}, []int{port1, port2, ...}, performance, vesionScan)
+scan, err := NewScan([]string{"host1", "host2", ...}, []int{port1, port2, ...}, performance, vesionScan, osScan)
 ```
 
 A simple main example:
