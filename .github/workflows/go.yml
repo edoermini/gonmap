@@ -29,14 +29,6 @@ jobs:
             curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
             dep ensure
         fi
-        if [ ! -f /usr/bin/nmap" ]; then
-          wget https://nmap.org/dist/nmap-7.80.tar.bz2
-          cd nmap-7.80
-          ./configure
-          make
-          su root
-          make install
-        fi
 
     - name: Build
       run: go build -v .
