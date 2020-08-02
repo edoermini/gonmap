@@ -19,7 +19,7 @@ A simple main example:
 	)
 
 	func main() {
-		scan := gonmap.Scan()
+		scan := gonmap.NewScan()
 
 		if err := scan.AddHost("github.com"); err != nil {
 			log.Fatal(err)
