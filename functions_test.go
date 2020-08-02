@@ -5,7 +5,7 @@ import (
 )
 
 func ExampleTCPScan() {
-	scan := NewInitScan()
+	scan := NewScan()
 	_ = scan.AddHost("127.0.0.1")
 	_ = scan.AddPort(80)
 	_ = scan.SetPerformance(5)
@@ -20,7 +20,7 @@ func ExampleTCPScan() {
 }
 
 func ExampleUDPScan() {
-	scan := NewInitScan()
+	scan := NewScan()
 	_ = scan.AddHost("127.0.0.1")
 	_ = scan.AddPort(80)
 	_ = scan.SetPerformance(5)
@@ -35,7 +35,7 @@ func ExampleUDPScan() {
 }
 
 func ExampleSYNScan() {
-	scan := NewInitScan()
+	scan := NewScan()
 	_ = scan.AddHost("127.0.0.1")
 	_ = scan.AddPort(80)
 	_ = scan.SetPerformance(5)
@@ -50,8 +50,8 @@ func ExampleSYNScan() {
 }
 
 func ExampleACKScan() {
-	scan := NewInitScan()
-	_ = scan.AddHost("google.com")
+	scan := NewScan()
+	_ = scan.AddHost("127.0.0.1")
 	_ = scan.AddPort(80)
 	_ = scan.SetPerformance(5)
 
@@ -65,8 +65,8 @@ func ExampleACKScan() {
 }
 
 func ExampleFINScan() {
-	scan := NewInitScan()
-	_ = scan.AddHost("google.com")
+	scan := NewScan()
+	_ = scan.AddHost("127.0.0.1")
 	_ = scan.AddPort(80)
 	_ = scan.SetPerformance(5)
 
@@ -80,8 +80,8 @@ func ExampleFINScan() {
 }
 
 func ExampleNULLScan() {
-	scan := NewInitScan()
-	_ = scan.AddHost("google.com")
+	scan := NewScan()
+	_ = scan.AddHost("127.0.0.1")
 	_ = scan.AddPort(80)
 	_ = scan.SetPerformance(5)
 
@@ -95,12 +95,27 @@ func ExampleNULLScan() {
 }
 
 func ExampleXmasScan() {
-	scan := NewInitScan()
-	_ = scan.AddHost("google.com")
+	scan := NewScan()
+	_ = scan.AddHost("127.0.0.1")
 	_ = scan.AddPort(80)
 	_ = scan.SetPerformance(5)
 
 	out, err := scan.XmasScan()
+	if err != nil {
+		return
+	}
+
+	fmt.Println(out.Hosts[0].PortList.Port[0].ID)
+	// Output: 80
+}
+
+func ExampleAggressiveScan() {
+	scan := NewScan()
+	_ = scan.AddHost("127.0.0.1")
+	_ = scan.AddPort(80)
+	_ = scan.SetPerformance(5)
+
+	out, err := scan.AggressiveScan()
 	if err != nil {
 		return
 	}

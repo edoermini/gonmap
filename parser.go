@@ -47,6 +47,7 @@ type PortInfo struct {
 	Protocol string    `xml:"protocol,attr" json:"protocol"`
 	Status   PortState `xml:"state" json:"status"`
 	Service  Service   `xml:"service" json:"service"`
+	Scripts  []Script  `xml:"script" json:"scripts"`
 }
 
 // PortState contains status of specific port
@@ -70,6 +71,25 @@ type OsInfo struct {
 type OsMatch struct {
 	Name     string `xml:"name,attr" json:"name"`
 	Accuracy string `xml:"accuracy,attr" json:"accuracy"`
+}
+
+// Script contains info about a specific script launched against a specific port
+type Script struct {
+	ID     string  `xml:"id,attr" json:"id"`
+	Elems  []Elem  `xml:"elem" json:"elems"`
+	Tables []Table `xml:"table" json:"tables"`
+}
+
+// Table contains a group of elems of a specific script
+type Table struct {
+	Key   string `xml:"key,attr" json:"key"`
+	Elems []Elem `xml:"elem" json:"elems"`
+}
+
+// Elem contains a part of script result
+type Elem struct {
+	Key   string `xml:"key,attr" json:"key"`
+	Value string `xml:",chardata" json:"value"`
 }
 
 func nmapXMLParse(xmlData []byte) NmapRun {

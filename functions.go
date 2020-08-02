@@ -16,6 +16,7 @@ type settings struct {
 	performance string
 	versionScan string
 	osDetection string
+	scripts     string
 }
 
 func arrayToString(a []int, delim string) string {
@@ -62,6 +63,15 @@ func getSettings(s Scan) settings {
 	// adds os detection to configuration
 	if s.osDetection {
 		configuration.osDetection = "-O"
+	}
+
+	if s.runScripts {
+
+		if len(s.scripts) == 0 {
+			configuration.scripts = "-sC"
+		} else {
+			configuration.scripts = "--scripts=" + strings.Join(s.scripts, ",")
+		}
 	}
 
 	return configuration
@@ -313,4 +323,17 @@ func (s Scan) IDLEScan(zombie string) (NmapRun, error) {
 	}
 
 	return nmapXMLParse(stdout), nil
+}
+
+// AggressiveScan makes a scan with version scan (-sV), os detection (-O), script scanning (-sC) and traceroute
+func (s Scan) AggressiveScan() (NmapRun, error) {
+	config := getSettings(s)
+	config.scanFlag = "-A"
+
+	xml, err := runScan(config)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	return nmapXMLParse(xml), nil
 }

@@ -1,14 +1,11 @@
 /*
 Package gonmap provides an efficient and simple API for nmap
 
-For every scan it's necessary define a scan with:
+For every scan it's necessary create a scan with:
 
-	scan := NewInitScan()
+	scan := NewScan()
 
-and populate it with related functions or directly with:
-
-	scan, err := NewScan([]string{"host1", "host2", ...}, []int{port1, port2, ...}, performance, vesionScan, osScan)
-
+and populate it with related functions.
 
 A simple main example:
 
@@ -37,7 +34,7 @@ A simple main example:
 			log.Fatal(err)
 		}
 
-		fmt.Println(ret)
+		fmt.Println(out.Hosts[0].PortList.Port[0].ID)
 	}
 */
 package gonmap

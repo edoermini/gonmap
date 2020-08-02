@@ -12,68 +12,27 @@ import (
 type Scan struct {
 	hosts       []string
 	ports       []int
+	scripts     []string
+	runScripts  bool
 	performance int
 	versionScan bool
 	osDetection bool
 }
 
-// NewInitScan returns a new Scan with default values
-func NewInitScan() Scan {
+// NewScan returns a new Scan with default values
+func NewScan() Scan {
 	return Scan{
 		hosts:       []string{},
 		ports:       []int{},
+		scripts:     []string{},
+		runScripts:  false,
 		performance: 4,
 		versionScan: false,
 		osDetection: false,
 	}
 }
 
-// NewScan return a new Scan with given settings if they are valid
-// and returns error otherwise
-func NewScan(hosts []string, ports []int, performance int, versionScan bool, osDetection bool) (Scan, error) {
-
-	if performance < 0 || performance > 5 {
-		return Scan{nil, nil, 0, false, false}, errors.New("Performance must be between 0 and 5")
-	}
-
-	if hosts == nil && ports == nil {
-		return Scan{[]string{}, []int{}, performance, versionScan, osDetection}, nil
-	}
-	if hosts == nil && ports != nil {
-		for _, p := range ports {
-			if p < 1 && p > 65536 {
-				return Scan{nil, nil, 0, false, false}, errors.New("Port parameter must be an integer between 0 and 65536")
-			}
-		}
-
-		return Scan{[]string{}, ports, performance, versionScan, osDetection}, nil
-	}
-	if hosts != nil && ports == nil {
-		for _, h := range hosts {
-			if !IsHost(h) {
-				return Scan{nil, nil, 0, false, false}, errors.New("Hosts mus be all valid")
-			}
-		}
-
-		return Scan{hosts, []int{}, performance, versionScan, osDetection}, nil
-	}
-
-	for _, p := range ports {
-		if p < 1 && p > 65536 {
-			return Scan{nil, nil, 0, false, false}, errors.New("Port parameter must be an integer between 0 and 65536")
-		}
-	}
-
-	for _, h := range hosts {
-		if !IsHost(h) {
-			return Scan{nil, nil, 0, false, false}, errors.New("Hosts mus be all valid")
-		}
-	}
-
-	return Scan{hosts, ports, performance, versionScan, osDetection}, nil
-}
-
-// HasPort checks if Scan s has port p
+// HasPort checks if scan has given port
 func (s Scan) HasPort(p int) bool {
 	for _, v := range s.ports {
 		if p == v {
@@ -84,7 +43,7 @@ func (s Scan) HasPort(p int) bool {
 	return false
 }
 
-// HasHost checks if Scan s has host h
+// HasHost checks if scan has given host
 func (s Scan) HasHost(h string) bool {
 
 	if !IsHost(h) {
@@ -100,7 +59,23 @@ func (s Scan) HasHost(h string) bool {
 	return false
 }
 
-// AddHost adds host h to Scan s if it's a valid host
+// HasScript checks if scan has given script
+func (s Scan) HasScript(script string) bool {
+
+	if script == "" {
+		return false
+	}
+
+	for _, scpt := range s.scripts {
+		if scpt == script {
+			return true
+		}
+	}
+
+	return false
+}
+
+// AddHost adds given host to scan if it's a valid host
 // and returns error otherwise
 func (s *Scan) AddHost(h string) error {
 
@@ -120,7 +95,7 @@ func (s *Scan) AddHost(h string) error {
 	return nil
 }
 
-// AddHosts adds hosts slice to Scan if all hosts are valid
+// AddHosts adds all given hosts to scan if all hosts are valid
 // and returns error otherwise
 func (s *Scan) AddHosts(hosts []string) error {
 
@@ -143,7 +118,7 @@ func (s *Scan) AddHosts(hosts []string) error {
 	return nil
 }
 
-// AddPort adds port p to Scan s if p is a valid port
+// AddPort adds given port to scan if is a valid port
 // and returns error otherwise
 func (s *Scan) AddPort(p int) error {
 	if p < 0 || p > 65536 {
@@ -182,7 +157,7 @@ func (s *Scan) AddPortRange(min int, max int) error {
 	return nil
 }
 
-// AddPorts adds ports in ports slice to Scan s if all ports are valid
+// AddPorts adds all given ports to scan if all ports are valid
 // and returns error otherwise
 func (s *Scan) AddPorts(ports []int) error {
 	if ports == nil {
@@ -225,6 +200,44 @@ func (s *Scan) SetOsDetection(choise bool) {
 	s.osDetection = choise
 }
 
+// AddScript adds given script to scan
+func (s *Scan) AddScript(script string) error {
+	if script == "" {
+		return errors.New("Script parameter must be a valid script")
+	}
+
+	s.runScripts = true
+	s.scripts = append(s.scripts, script)
+
+	return nil
+}
+
+// AddScripts adds all given scripts to scan
+func (s *Scan) AddScripts(scripts []string) error {
+
+	for _, scpt := range scripts {
+		if scpt == "" {
+			return errors.New("Scripts parameter must contain all valid script")
+		}
+	}
+
+	s.runScripts = true
+
+	for _, scpt := range scripts {
+		if !s.HasScript(scpt) {
+			s.scripts = append(s.scripts, scpt)
+		}
+	}
+
+	return nil
+}
+
+// RunScripts sets scripts running if choise is true.
+// Setting this true without adding scripts it's equivalent to a scan with default scripts. Flag: -sC
+func (s *Scan) RunScripts(choise bool) {
+	s.runScripts = choise
+}
+
 // GetHosts returns hosts set
 func (s Scan) GetHosts() []string {
 	ret := make([]string, len(s.hosts))
@@ -247,8 +260,13 @@ func (s Scan) GetPerformance() int {
 }
 
 // GetOsDetection returns os detection choise
-func (s *Scan) GetOsDetection() bool {
+func (s Scan) GetOsDetection() bool {
 	return s.osDetection
+}
+
+// GetRunScript returns script running choise
+func (s Scan) GetRunScript() bool {
+	return s.runScripts
 }
 
 func (s Scan) String() string {
