@@ -123,9 +123,8 @@ func runScan(config settings) ([]byte, error) {
 	return stdout, nil
 }
 
-// TCPScan makes a tcp connect scan; namp flag: -sT.
-// A TCP scan is generally used to check and complete a three-way handshake
-// between you and a chosen target system.
+// TCPScan is generally used to check and complete a three-way handshake
+// between you and a chosen target system. Flag: -sT
 func (s Scan) TCPScan() (NmapRun, error) {
 
 	config := getSettings(s)
@@ -136,13 +135,12 @@ func (s Scan) TCPScan() (NmapRun, error) {
 		log.Fatal(err)
 	}
 
-	return NmapXMLParse(xml), nil
+	return nmapXMLParse(xml), nil
 
 }
 
-// UDPScan makes a udp scan; nmap flag: -sU.
-// UDP scans are used to check whether there is any UDP port up and
-// listening for incoming requests on the target machine.
+// UDPScan are used to check whether there is any UDP port up and
+// listening for incoming requests on the target machine. Flag: -sU
 func (s Scan) UDPScan() (NmapRun, error) {
 
 	config := getSettings(s)
@@ -153,12 +151,11 @@ func (s Scan) UDPScan() (NmapRun, error) {
 		log.Fatal(err)
 	}
 
-	return NmapXMLParse(xml), nil
+	return nmapXMLParse(xml), nil
 }
 
-// SYNScan makes a tcp syn scan; nmap flag: -sS.
-// This is another form of TCP scan. The difference is unlike a normal TCP scan, nmap itself crafts a syn packet,
-// which is the first packet that is sent to establish a TCP connection.
+// SYNScan is another form of TCP scan. The difference is unlike a normal TCP scan, nmap itself crafts a syn packet,
+// which is the first packet that is sent to establish a TCP connection. Flag: -sS
 func (s Scan) SYNScan() (NmapRun, error) {
 
 	config := getSettings(s)
@@ -169,12 +166,11 @@ func (s Scan) SYNScan() (NmapRun, error) {
 		log.Fatal(err)
 	}
 
-	return NmapXMLParse(xml), nil
+	return nmapXMLParse(xml), nil
 
 }
 
-// ACKScan makes an ack scan; nmap flag: -sA.
-// ACK scans are used to determine whether a particular port is filtered or not.
+// ACKScan are used to determine whether a particular port is filtered or not. Flag: -sA
 func (s Scan) ACKScan() (NmapRun, error) {
 
 	config := getSettings(s)
@@ -185,11 +181,10 @@ func (s Scan) ACKScan() (NmapRun, error) {
 		log.Fatal(err)
 	}
 
-	return NmapXMLParse(xml), nil
+	return nmapXMLParse(xml), nil
 }
 
-// FINScan makes a fin scan; nmap flag: -sF.
-// Like the SYN scan, but sends a TCP FIN packet instead.
+// FINScan is like SYN scan, but sends a TCP FIN packet instead. Flag: -sF
 func (s Scan) FINScan() (NmapRun, error) {
 
 	config := getSettings(s)
@@ -200,12 +195,11 @@ func (s Scan) FINScan() (NmapRun, error) {
 		log.Fatal(err)
 	}
 
-	return NmapXMLParse(xml), nil
+	return nmapXMLParse(xml), nil
 }
 
-// NULLScan makes a null scan; nmap flag: -sN.
-// Null scans are extremely stealthy scan and what they do
-// is as the name suggests — they set all the header fields to null.
+// NULLScan are extremely stealthy scan and what they do
+// is as the name suggests — they set all the header fields to null. Flag: -sN
 func (s Scan) NULLScan() (NmapRun, error) {
 
 	config := getSettings(s)
@@ -216,11 +210,10 @@ func (s Scan) NULLScan() (NmapRun, error) {
 		log.Fatal(err)
 	}
 
-	return NmapXMLParse(xml), nil
+	return nmapXMLParse(xml), nil
 }
 
-// XMASScan makes a xmas scan; nmap flag: -sX.
-// Just like null scans, these are also stealthy in nature.
+// XmasScan is just like null scans, these are also stealthy in nature. Flag -sX
 func (s Scan) XmasScan() (NmapRun, error) {
 
 	config := getSettings(s)
@@ -231,13 +224,12 @@ func (s Scan) XmasScan() (NmapRun, error) {
 		log.Fatal(err)
 	}
 
-	return NmapXMLParse(xml), nil
+	return nmapXMLParse(xml), nil
 }
 
-// WindowScan makes a window scan; nmap flag: -sW
-// Is exactly the same as ACK scan except that it exploits
+// WindowScan is exactly the same as ACK scan except that it exploits
 // an implementation detail of certain systems to differentiate open ports
-// from closed ones, rather than always printing unfiltered when a RST is returned.
+// from closed ones, rather than always printing unfiltered when a RST is returned. Flag: -sW
 func (s Scan) WindowScan() (NmapRun, error) {
 
 	config := getSettings(s)
@@ -248,11 +240,11 @@ func (s Scan) WindowScan() (NmapRun, error) {
 		log.Fatal(err)
 	}
 
-	return NmapXMLParse(xml), nil
+	return nmapXMLParse(xml), nil
 }
 
-// MaimonScan makes a maimon scan; flag: -sM
-// Is exactly the same as NULL, FIN, and Xmas scan, except that the probe is FIN/ACK.
+// MaimonScan is exactly the same as NULL, FIN, and Xmas scan, except that the probe is FIN/ACK.
+// Flag: -sM
 func (s Scan) MaimonScan() (NmapRun, error) {
 
 	config := getSettings(s)
@@ -263,11 +255,11 @@ func (s Scan) MaimonScan() (NmapRun, error) {
 		log.Fatal(err)
 	}
 
-	return NmapXMLParse(xml), nil
+	return nmapXMLParse(xml), nil
 }
 
-// IDLEScan makes a idle scan; nmap flag: -sI.
-// IDLE scan is the stealthiest of all scans as the packets are bounced off an external host.
+// IDLEScan is the stealthiest of all scans as the packets are bounced off an external host.
+// Flag: -sI
 func (s Scan) IDLEScan(zombie string) (NmapRun, error) {
 
 	if !IsHost(zombie) {
@@ -320,5 +312,5 @@ func (s Scan) IDLEScan(zombie string) (NmapRun, error) {
 		return NmapRun{}, errors.New(err.Error() + "\n" + string(stderr))
 	}
 
-	return NmapXMLParse(stdout), nil
+	return nmapXMLParse(stdout), nil
 }

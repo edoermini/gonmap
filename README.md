@@ -59,7 +59,6 @@ func main() {
 - [type Host](<#type-host>)
 - [type HostStatus](<#type-hoststatus>)
 - [type NmapRun](<#type-nmaprun>)
-  - [func NmapXMLParse(xmlData []byte) NmapRun](<#func-nmapxmlparse>)
 - [type OsInfo](<#type-osinfo>)
 - [type OsMatch](<#type-osmatch>)
 - [type Port](<#type-port>)
@@ -106,7 +105,9 @@ func IsHost(h string) bool
 
 IsHost gets a string and returns true if string represents a host false otherwise
 
-## type [Address](<https://github.com/MrRadix/gonmap/blob/master/parser.go#L29-L32>)
+## type [Address](<https://github.com/MrRadix/gonmap/blob/master/parser.go#L34-L37>)
+
+Address contains info about address \(ipv4\, ipv6\)
 
 ```go
 type Address struct {
@@ -115,7 +116,9 @@ type Address struct {
 }
 ```
 
-## type [Host](<https://github.com/MrRadix/gonmap/blob/master/parser.go#L17-L22>)
+## type [Host](<https://github.com/MrRadix/gonmap/blob/master/parser.go#L20-L25>)
+
+Host contains all info about a specific host
 
 ```go
 type Host struct {
@@ -126,7 +129,9 @@ type Host struct {
 }
 ```
 
-## type [HostStatus](<https://github.com/MrRadix/gonmap/blob/master/parser.go#L24-L27>)
+## type [HostStatus](<https://github.com/MrRadix/gonmap/blob/master/parser.go#L28-L31>)
+
+HostStatus contains status of specific host
 
 ```go
 type HostStatus struct {
@@ -135,7 +140,9 @@ type HostStatus struct {
 }
 ```
 
-## type [NmapRun](<https://github.com/MrRadix/gonmap/blob/master/parser.go#L7-L10>)
+## type [NmapRun](<https://github.com/MrRadix/gonmap/blob/master/parser.go#L8-L11>)
+
+NmapRun is the root of every scan result
 
 ```go
 type NmapRun struct {
@@ -144,33 +151,9 @@ type NmapRun struct {
 }
 ```
 
-### func [NmapXMLParse](<https://github.com/MrRadix/gonmap/blob/master/parser.go#L65>)
+## type [OsInfo](<https://github.com/MrRadix/gonmap/blob/master/parser.go#L65-L67>)
 
-```go
-func NmapXMLParse(xmlData []byte) NmapRun
-```
-
-NmapXMLParse returns an NmapRun from xml nmap output
-
-<details><summary>Example</summary>
-<p>
-
-```go
-{
-	xmlFile, err := os.Open("example1.xml")
-	if err != nil {
-		return
-	}
-
-	byteValue, _ := ioutil.ReadAll(xmlFile)
-	fmt.Println(NmapXMLParse(byteValue))
-}
-```
-
-</p>
-</details>
-
-## type [OsInfo](<https://github.com/MrRadix/gonmap/blob/master/parser.go#L55-L57>)
+OsInfo contains all os detection matches
 
 ```go
 type OsInfo struct {
@@ -178,7 +161,9 @@ type OsInfo struct {
 }
 ```
 
-## type [OsMatch](<https://github.com/MrRadix/gonmap/blob/master/parser.go#L59-L62>)
+## type [OsMatch](<https://github.com/MrRadix/gonmap/blob/master/parser.go#L70-L73>)
+
+OsMatch contains info about an os detection match
 
 ```go
 type OsMatch struct {
@@ -187,7 +172,9 @@ type OsMatch struct {
 }
 ```
 
-## type [Port](<https://github.com/MrRadix/gonmap/blob/master/parser.go#L34-L36>)
+## type [Port](<https://github.com/MrRadix/gonmap/blob/master/parser.go#L40-L42>)
+
+Port contains all port checked in scan
 
 ```go
 type Port struct {
@@ -195,7 +182,9 @@ type Port struct {
 }
 ```
 
-## type [PortInfo](<https://github.com/MrRadix/gonmap/blob/master/parser.go#L38-L43>)
+## type [PortInfo](<https://github.com/MrRadix/gonmap/blob/master/parser.go#L45-L50>)
+
+PortInfo contains info about a specific port
 
 ```go
 type PortInfo struct {
@@ -206,7 +195,9 @@ type PortInfo struct {
 }
 ```
 
-## type [PortState](<https://github.com/MrRadix/gonmap/blob/master/parser.go#L45-L48>)
+## type [PortState](<https://github.com/MrRadix/gonmap/blob/master/parser.go#L53-L56>)
+
+PortState contains status of specific port
 
 ```go
 type PortState struct {
@@ -241,13 +232,13 @@ func NewScan(hosts []string, ports []int, performance int, versionScan bool, osD
 
 NewScan return a new Scan with given settings if they are valid and returns error otherwise
 
-### func \(Scan\) [ACKScan](<https://github.com/MrRadix/gonmap/blob/master/functions.go#L178>)
+### func \(Scan\) [ACKScan](<https://github.com/MrRadix/gonmap/blob/master/functions.go#L174>)
 
 ```go
 func (s Scan) ACKScan() (NmapRun, error)
 ```
 
-ACKScan makes an ack scan; nmap flag: \-sA\. ACK scans are used to determine whether a particular port is filtered or not\.
+ACKScan are used to determine whether a particular port is filtered or not\. Flag: \-sA
 
 ### func \(\*Scan\) [AddHost](<https://github.com/MrRadix/gonmap/blob/master/scan.go#L105>)
 
@@ -289,13 +280,13 @@ func (s *Scan) AddPorts(ports []int) error
 
 AddPorts adds ports in ports slice to Scan s if all ports are valid and returns error otherwise
 
-### func \(Scan\) [FINScan](<https://github.com/MrRadix/gonmap/blob/master/functions.go#L193>)
+### func \(Scan\) [FINScan](<https://github.com/MrRadix/gonmap/blob/master/functions.go#L188>)
 
 ```go
 func (s Scan) FINScan() (NmapRun, error)
 ```
 
-FINScan makes a fin scan; nmap flag: \-sF\. Like the SYN scan\, but sends a TCP FIN packet instead\.
+FINScan is like SYN scan\, but sends a TCP FIN packet instead\. Flag: \-sF
 
 ### func \(Scan\) [GetHosts](<https://github.com/MrRadix/gonmap/blob/master/scan.go#L229>)
 
@@ -345,13 +336,13 @@ func (s Scan) HasPort(p int) bool
 
 HasPort checks if Scan s has port p
 
-### func \(Scan\) [IDLEScan](<https://github.com/MrRadix/gonmap/blob/master/functions.go#L271>)
+### func \(Scan\) [IDLEScan](<https://github.com/MrRadix/gonmap/blob/master/functions.go#L263>)
 
 ```go
 func (s Scan) IDLEScan(zombie string) (NmapRun, error)
 ```
 
-IDLEScan makes a idle scan; nmap flag: \-sI\. IDLE scan is the stealthiest of all scans as the packets are bounced off an external host\.
+IDLEScan is the stealthiest of all scans as the packets are bounced off an external host\. Flag: \-sI
 
 ### func \(Scan\) [IsEqual](<https://github.com/MrRadix/gonmap/blob/master/scan.go#L259>)
 
@@ -361,29 +352,29 @@ func (s Scan) IsEqual(s1 Scan) bool
 
 IsEqual cheks if two scans are equal
 
-### func \(Scan\) [MaimonScan](<https://github.com/MrRadix/gonmap/blob/master/functions.go#L256>)
+### func \(Scan\) [MaimonScan](<https://github.com/MrRadix/gonmap/blob/master/functions.go#L248>)
 
 ```go
 func (s Scan) MaimonScan() (NmapRun, error)
 ```
 
-MaimonScan makes a maimon scan; flag: \-sM Is exactly the same as NULL\, FIN\, and Xmas scan\, except that the probe is FIN/ACK\.
+MaimonScan is exactly the same as NULL\, FIN\, and Xmas scan\, except that the probe is FIN/ACK\. Flag: \-sM
 
-### func \(Scan\) [NULLScan](<https://github.com/MrRadix/gonmap/blob/master/functions.go#L209>)
+### func \(Scan\) [NULLScan](<https://github.com/MrRadix/gonmap/blob/master/functions.go#L203>)
 
 ```go
 func (s Scan) NULLScan() (NmapRun, error)
 ```
 
-NULLScan makes a null scan; nmap flag: \-sN\. Null scans are extremely stealthy scan and what they do is as the name suggests — they set all the header fields to null\.
+NULLScan are extremely stealthy scan and what they do is as the name suggests — they set all the header fields to null\. Flag: \-sN
 
-### func \(Scan\) [SYNScan](<https://github.com/MrRadix/gonmap/blob/master/functions.go#L162>)
+### func \(Scan\) [SYNScan](<https://github.com/MrRadix/gonmap/blob/master/functions.go#L159>)
 
 ```go
 func (s Scan) SYNScan() (NmapRun, error)
 ```
 
-SYNScan makes a tcp syn scan; nmap flag: \-sS\. This is another form of TCP scan\. The difference is unlike a normal TCP scan\, nmap itself crafts a syn packet\, which is the first packet that is sent to establish a TCP connection\.
+SYNScan is another form of TCP scan\. The difference is unlike a normal TCP scan\, nmap itself crafts a syn packet\, which is the first packet that is sent to establish a TCP connection\. Flag: \-sS
 
 ### func \(\*Scan\) [SetOsDetection](<https://github.com/MrRadix/gonmap/blob/master/scan.go#L224>)
 
@@ -415,39 +406,41 @@ SetVersionScan sets service version scan\. Nmap flag: \-sV
 func (s Scan) String() string
 ```
 
-### func \(Scan\) [TCPScan](<https://github.com/MrRadix/gonmap/blob/master/functions.go#L129>)
+### func \(Scan\) [TCPScan](<https://github.com/MrRadix/gonmap/blob/master/functions.go#L128>)
 
 ```go
 func (s Scan) TCPScan() (NmapRun, error)
 ```
 
-TCPScan makes a tcp connect scan; namp flag: \-sT\. A TCP scan is generally used to check and complete a three\-way handshake between you and a chosen target system\.
+TCPScan is generally used to check and complete a three\-way handshake between you and a chosen target system\. Flag: \-sT
 
-### func \(Scan\) [UDPScan](<https://github.com/MrRadix/gonmap/blob/master/functions.go#L146>)
+### func \(Scan\) [UDPScan](<https://github.com/MrRadix/gonmap/blob/master/functions.go#L144>)
 
 ```go
 func (s Scan) UDPScan() (NmapRun, error)
 ```
 
-UDPScan makes a udp scan; nmap flag: \-sU\. UDP scans are used to check whether there is any UDP port up and listening for incoming requests on the target machine\.
+UDPScan are used to check whether there is any UDP port up and listening for incoming requests on the target machine\. Flag: \-sU
 
-### func \(Scan\) [WindowScan](<https://github.com/MrRadix/gonmap/blob/master/functions.go#L241>)
+### func \(Scan\) [WindowScan](<https://github.com/MrRadix/gonmap/blob/master/functions.go#L233>)
 
 ```go
 func (s Scan) WindowScan() (NmapRun, error)
 ```
 
-WindowScan makes a window scan; nmap flag: \-sW Is exactly the same as ACK scan except that it exploits an implementation detail of certain systems to differentiate open ports from closed ones\, rather than always printing unfiltered when a RST is returned\.
+WindowScan is exactly the same as ACK scan except that it exploits an implementation detail of certain systems to differentiate open ports from closed ones\, rather than always printing unfiltered when a RST is returned\. Flag: \-sW
 
-### func \(Scan\) [XmasScan](<https://github.com/MrRadix/gonmap/blob/master/functions.go#L224>)
+### func \(Scan\) [XmasScan](<https://github.com/MrRadix/gonmap/blob/master/functions.go#L217>)
 
 ```go
 func (s Scan) XmasScan() (NmapRun, error)
 ```
 
-XMASScan makes a xmas scan; nmap flag: \-sX\. Just like null scans\, these are also stealthy in nature\.
+XmasScan is just like null scans\, these are also stealthy in nature\. Flag \-sX
 
-## type [ScanInfo](<https://github.com/MrRadix/gonmap/blob/master/parser.go#L12-L15>)
+## type [ScanInfo](<https://github.com/MrRadix/gonmap/blob/master/parser.go#L14-L17>)
+
+ScanInfo contains info about the scan
 
 ```go
 type ScanInfo struct {
@@ -456,7 +449,9 @@ type ScanInfo struct {
 }
 ```
 
-## type [Service](<https://github.com/MrRadix/gonmap/blob/master/parser.go#L50-L53>)
+## type [Service](<https://github.com/MrRadix/gonmap/blob/master/parser.go#L59-L62>)
+
+Service contains info about service served in a specific port
 
 ```go
 type Service struct {
