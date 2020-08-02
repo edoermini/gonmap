@@ -12,7 +12,7 @@ For every scan it's necessary define a scan with scan := NewInitScan\(\) and pop
 
 A simple main example:
 
-package main
+\`\`\` package main
 
 import \( "log" "fmt"
 
@@ -41,7 +41,7 @@ if err != nil {
 fmt.Println(ret)
 ```
 
-\}
+\} \`\`\`
 
 ## Index
 
