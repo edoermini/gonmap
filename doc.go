@@ -34,7 +34,7 @@ A simple main example:
 			log.Fatal(err)
 		}
 
-		fmt.Println(out.Hosts[0].PortList.Port[0].ID)
+		fmt.Println(ret.Hosts[0].PortList.Port[0].ID)
 	}
 */
 package gonmap
