@@ -22,6 +22,7 @@ func TestIsValidHost(t *testing.T) {
 		"0-256.4.20.4-7":          false,
 		"0-254.4.20.4-7/32":       true,
 		"0-254.4.20.4-7/33":       false,
+		"0-254.4.20,21,22.4-7":    true,
 	}
 
 	for test, expected := range testSet {
