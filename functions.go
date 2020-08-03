@@ -32,9 +32,7 @@ type HostDiscovery interface {
 }
 
 type settings struct {
-	scanFlag    string
 	portsFlag   string
-	hosts       string
 	performance string
 	versionScan string
 	osDetection string
@@ -47,12 +45,7 @@ func arrayToString(a []int, delim string) string {
 
 func getSettings(s Scan) settings {
 
-	configuration := settings{
-		portsFlag:   "",
-		hosts:       strings.Join(s.GetHosts(), " "),
-		versionScan: "",
-		osDetection: "",
-	}
+	configuration := settings{}
 
 	// adds ports flag to configuration
 	if len(s.ports) == 0 {
@@ -99,7 +92,7 @@ func getSettings(s Scan) settings {
 	return configuration
 }
 
-func runScan(config settings) ([]byte, error) {
+func runScan(config settings, hosts []string, scanFlag string) ([]byte, error) {
 
 	// Finds nmap binary path
 	nmap, err := exec.LookPath("nmap")
@@ -107,20 +100,22 @@ func runScan(config settings) ([]byte, error) {
 		return nil, err
 	}
 
-	if config.hosts == "" {
-		return nil, errors.New("Must be present at least one host")
-	}
-
-	cmd := exec.Command(
-		nmap, "-oX", "-", "-vvvvv",
+	args := []string{
 		config.performance,
 		config.versionScan,
 		config.osDetection,
-		config.scanFlag,
+		scanFlag,
 		config.portsFlag,
 		config.scripts,
-		config.hosts,
-	)
+		"-oX",
+		"-",
+		"-vvvvv",
+	}
+
+	cmd := exec.Cmd{
+		Path: nmap,
+		Args: append(args, hosts...),
+	}
 
 	// Configure output pipes
 	errPipe, err := cmd.StderrPipe()
@@ -153,6 +148,8 @@ func runScan(config settings) ([]byte, error) {
 		return nil, errors.New(err.Error() + "\n" + string(stderr))
 	}
 
+	fmt.Println(string(stdout))
+
 	return stdout, nil
 }
 
@@ -161,9 +158,8 @@ func runScan(config settings) ([]byte, error) {
 func (s Scan) TCPScan() (NmapRun, error) {
 
 	config := getSettings(s)
-	config.scanFlag = "-sT"
 
-	xml, err := runScan(config)
+	xml, err := runScan(config, s.hosts, "-sT")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -177,9 +173,8 @@ func (s Scan) TCPScan() (NmapRun, error) {
 func (s Scan) UDPScan() (NmapRun, error) {
 
 	config := getSettings(s)
-	config.scanFlag = "-sU"
 
-	xml, err := runScan(config)
+	xml, err := runScan(config, s.hosts, "-sU")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -192,9 +187,8 @@ func (s Scan) UDPScan() (NmapRun, error) {
 func (s Scan) SYNScan() (NmapRun, error) {
 
 	config := getSettings(s)
-	config.scanFlag = "-sS"
 
-	xml, err := runScan(config)
+	xml, err := runScan(config, s.hosts, "-sS")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -207,9 +201,8 @@ func (s Scan) SYNScan() (NmapRun, error) {
 func (s Scan) ACKScan() (NmapRun, error) {
 
 	config := getSettings(s)
-	config.scanFlag = "-sA"
 
-	xml, err := runScan(config)
+	xml, err := runScan(config, s.hosts, "-sA")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -221,9 +214,8 @@ func (s Scan) ACKScan() (NmapRun, error) {
 func (s Scan) FINScan() (NmapRun, error) {
 
 	config := getSettings(s)
-	config.scanFlag = "-sF"
 
-	xml, err := runScan(config)
+	xml, err := runScan(config, s.hosts, "-sF")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -236,9 +228,8 @@ func (s Scan) FINScan() (NmapRun, error) {
 func (s Scan) NULLScan() (NmapRun, error) {
 
 	config := getSettings(s)
-	config.scanFlag = "-sN"
 
-	xml, err := runScan(config)
+	xml, err := runScan(config, s.hosts, "-sN")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -250,9 +241,8 @@ func (s Scan) NULLScan() (NmapRun, error) {
 func (s Scan) XmasScan() (NmapRun, error) {
 
 	config := getSettings(s)
-	config.scanFlag = "-sX"
 
-	xml, err := runScan(config)
+	xml, err := runScan(config, s.hosts, "-sX")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -266,9 +256,8 @@ func (s Scan) XmasScan() (NmapRun, error) {
 func (s Scan) WindowScan() (NmapRun, error) {
 
 	config := getSettings(s)
-	config.scanFlag = "-sW"
 
-	xml, err := runScan(config)
+	xml, err := runScan(config, s.hosts, "-sW")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -281,9 +270,8 @@ func (s Scan) WindowScan() (NmapRun, error) {
 func (s Scan) MaimonScan() (NmapRun, error) {
 
 	config := getSettings(s)
-	config.scanFlag = "-sW"
 
-	xml, err := runScan(config)
+	xml, err := runScan(config, s.hosts, "-sM")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -300,7 +288,6 @@ func (s Scan) IDLEScan(zombie string) (NmapRun, error) {
 	}
 
 	config := getSettings(s)
-	config.scanFlag = "-sI"
 
 	// Finds nmap binary path
 	nmap, err := exec.LookPath("nmap")
@@ -308,11 +295,23 @@ func (s Scan) IDLEScan(zombie string) (NmapRun, error) {
 		return NmapRun{}, err
 	}
 
-	if config.hosts == "" {
-		return NmapRun{}, errors.New("Must be present at least one host")
+	args := []string{
+		config.performance,
+		config.versionScan,
+		config.osDetection,
+		"-sI",
+		zombie,
+		config.portsFlag,
+		config.scripts,
+		"-oX",
+		"-",
+		"-vvvvv",
 	}
 
-	cmd := exec.Command(nmap, "-oX", "-", "-vvvvv", config.performance, config.scanFlag, zombie, config.portsFlag, config.versionScan, config.hosts)
+	cmd := exec.Cmd{
+		Path: nmap,
+		Args: append(args, s.hosts...),
+	}
 
 	// Configure output pipes
 	errPipe, err := cmd.StderrPipe()
@@ -351,9 +350,8 @@ func (s Scan) IDLEScan(zombie string) (NmapRun, error) {
 // AggressiveScan makes a scan with version scan (-sV), os detection (-O), script scanning (-sC) and traceroute
 func (s Scan) AggressiveScan() (NmapRun, error) {
 	config := getSettings(s)
-	config.scanFlag = "-A"
 
-	xml, err := runScan(config)
+	xml, err := runScan(config, s.hosts, "-A")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -364,9 +362,8 @@ func (s Scan) AggressiveScan() (NmapRun, error) {
 // SYNDiscovery makes a TCP SYN discovery
 func (s Scan) SYNDiscovery() (NmapRun, error) {
 	config := getSettings(s)
-	config.scanFlag = "-PS"
 
-	xml, err := runScan(config)
+	xml, err := runScan(config, s.hosts, "-PS")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -377,9 +374,8 @@ func (s Scan) SYNDiscovery() (NmapRun, error) {
 // ACKDiscovery makes a TCP ACK discovery
 func (s Scan) ACKDiscovery() (NmapRun, error) {
 	config := getSettings(s)
-	config.scanFlag = "-PA"
 
-	xml, err := runScan(config)
+	xml, err := runScan(config, s.hosts, "-PA")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -390,9 +386,8 @@ func (s Scan) ACKDiscovery() (NmapRun, error) {
 // UDPDiscovery makes an UDP discovery
 func (s Scan) UDPDiscovery() (NmapRun, error) {
 	config := getSettings(s)
-	config.scanFlag = "-PU"
 
-	xml, err := runScan(config)
+	xml, err := runScan(config, s.hosts, "-PU")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -403,9 +398,8 @@ func (s Scan) UDPDiscovery() (NmapRun, error) {
 // SCTPDiscovery makes an SCTP discovery
 func (s Scan) SCTPDiscovery() (NmapRun, error) {
 	config := getSettings(s)
-	config.scanFlag = "-PY"
 
-	xml, err := runScan(config)
+	xml, err := runScan(config, s.hosts, "-PY")
 	if err != nil {
 		log.Fatal(err)
 	}
