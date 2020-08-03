@@ -26,7 +26,7 @@ func NewScan() Scan {
 		ports:       []int{},
 		scripts:     []string{},
 		runScripts:  false,
-		performance: 4,
+		performance: 5,
 		versionScan: false,
 		osDetection: false,
 	}
