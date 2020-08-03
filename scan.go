@@ -254,6 +254,14 @@ func (s Scan) GetPorts() []int {
 	return ret
 } // TODO test
 
+// GetScripts returns scripts set
+func (s Scan) GetScripts() []string {
+	ret := make([]string, len(s.scripts))
+	copy(ret, s.scripts)
+
+	return ret
+}
+
 // GetPerformance returns performance
 func (s Scan) GetPerformance() int {
 	return s.performance

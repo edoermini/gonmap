@@ -78,6 +78,7 @@ func main() {
   - [func (s Scan) GetPerformance() int](<#func-scan-getperformance>)
   - [func (s Scan) GetPorts() []int](<#func-scan-getports>)
   - [func (s Scan) GetRunScript() bool](<#func-scan-getrunscript>)
+  - [func (s Scan) GetScripts() []string](<#func-scan-getscripts>)
   - [func (s Scan) HasHost(h string) bool](<#func-scan-hashost>)
   - [func (s Scan) HasPort(p int) bool](<#func-scan-hasport>)
   - [func (s Scan) HasScript(script string) bool](<#func-scan-hasscript>)
@@ -328,7 +329,7 @@ func (s Scan) GetHosts() []string
 
 GetHosts returns hosts set
 
-### func \(Scan\) [GetOsDetection](<https://github.com/MrRadix/gonmap/blob/master/scan.go#L263>)
+### func \(Scan\) [GetOsDetection](<https://github.com/MrRadix/gonmap/blob/master/scan.go#L271>)
 
 ```go
 func (s Scan) GetOsDetection() bool
@@ -336,7 +337,7 @@ func (s Scan) GetOsDetection() bool
 
 GetOsDetection returns os detection choise
 
-### func \(Scan\) [GetPerformance](<https://github.com/MrRadix/gonmap/blob/master/scan.go#L258>)
+### func \(Scan\) [GetPerformance](<https://github.com/MrRadix/gonmap/blob/master/scan.go#L266>)
 
 ```go
 func (s Scan) GetPerformance() int
@@ -352,13 +353,21 @@ func (s Scan) GetPorts() []int
 
 GetPorts returns ports set
 
-### func \(Scan\) [GetRunScript](<https://github.com/MrRadix/gonmap/blob/master/scan.go#L268>)
+### func \(Scan\) [GetRunScript](<https://github.com/MrRadix/gonmap/blob/master/scan.go#L276>)
 
 ```go
 func (s Scan) GetRunScript() bool
 ```
 
 GetRunScript returns script running choise
+
+### func \(Scan\) [GetScripts](<https://github.com/MrRadix/gonmap/blob/master/scan.go#L258>)
+
+```go
+func (s Scan) GetScripts() []string
+```
+
+GetScripts returns scripts set
 
 ### func \(Scan\) [HasHost](<https://github.com/MrRadix/gonmap/blob/master/scan.go#L47>)
 
@@ -392,7 +401,7 @@ func (s Scan) IDLEScan(zombie string) (NmapRun, error)
 
 IDLEScan is the stealthiest of all scans as the packets are bounced off an external host\. Flag: \-sI
 
-### func \(Scan\) [IsEqual](<https://github.com/MrRadix/gonmap/blob/master/scan.go#L277>)
+### func \(Scan\) [IsEqual](<https://github.com/MrRadix/gonmap/blob/master/scan.go#L285>)
 
 ```go
 func (s Scan) IsEqual(s1 Scan) bool
@@ -456,7 +465,7 @@ func (s *Scan) SetVersionScan(choise bool)
 
 SetVersionScan sets service version scan\. Nmap flag: \-sV
 
-### func \(Scan\) [String](<https://github.com/MrRadix/gonmap/blob/master/scan.go#L272>)
+### func \(Scan\) [String](<https://github.com/MrRadix/gonmap/blob/master/scan.go#L280>)
 
 ```go
 func (s Scan) String() string
