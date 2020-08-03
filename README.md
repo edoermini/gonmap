@@ -114,7 +114,7 @@ func main() {
 func IsValidHost(h string) bool
 ```
 
-IsValidHost gets a string and returns true if string represents a valid host false otherwise\. Examples of valid hosts: 192\.168\.1\.0\, 192\.0\-100\.0\-3\.8\, 192\.168\.1\.0/24\, 192\.0\-100\.0\-3\.8/19\, www\.google\.com\,github\.com/17
+IsValidHost gets a string and returns true if string represents a valid host false otherwise\. Examples of valid hosts: 192\.168\.1\.0\, 192\.0\-100\.0\-3\.8\, 192\.168\.1\.0/24\, 192\.0\-100\.0\-3\.8/19\, www\.google\.com\, github\.com/17
 
 ## type [Address](<https://github.com/MrRadix/gonmap/blob/master/parser.go#L34-L37>)
 
