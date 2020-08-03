@@ -295,7 +295,7 @@ func (s Scan) MaimonScan() (NmapRun, error) {
 // Flag: -sI
 func (s Scan) IDLEScan(zombie string) (NmapRun, error) {
 
-	if !IsHost(zombie) {
+	if !IsValidHost(zombie) {
 		return NmapRun{}, errors.New("Zombie target must be a valid host")
 	}
 

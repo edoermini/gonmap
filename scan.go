@@ -46,7 +46,7 @@ func (s Scan) HasPort(p int) bool {
 // HasHost checks if scan has given host
 func (s Scan) HasHost(h string) bool {
 
-	if !IsHost(h) {
+	if !IsValidHost(h) {
 		return false
 	}
 
@@ -83,7 +83,7 @@ func (s *Scan) AddHost(h string) error {
 		return errors.New("Parameter must be a created Host")
 	}
 
-	if !IsHost(h) {
+	if !IsValidHost(h) {
 		return errors.New("Parameter must be a valid Host")
 
 	}
@@ -104,7 +104,7 @@ func (s *Scan) AddHosts(hosts []string) error {
 	}
 
 	for _, h := range hosts {
-		if !IsHost(h) {
+		if !IsValidHost(h) {
 			return errors.New("Hosts mus be all valid")
 		}
 	}

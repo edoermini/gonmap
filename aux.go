@@ -5,11 +5,23 @@ import (
 	"regexp"
 )
 
-// IsHost gets a string and returns true if
-// string represents a host false otherwise
-func IsHost(h string) bool {
-	ipRegex := `^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$`
-	domainRegex := `^[a-zA-Z0-9][a-zA-Z0-9-_]{0,61}[a-zA-Z0-9]{0,1}\.([a-zA-Z]{1,6}|[a-zA-Z0-9-]{1,30}\.[a-zA-Z]{2,3})$`
+// IsValidHost gets a string and returns true if
+// string represents a valid host false otherwise.
+// Examples of valid hosts: 192.168.1.0, 192.0-100.0-3.8, 192.168.1.0/24, 192.0-100.0-3.8/19, www.google.com,github.com/17
+func IsValidHost(h string) bool {
+
+	// Match examples:
+	// - 192.168.1.0
+	// - 192.0-100.0-3.8
+	// - 192.168.1.0/24
+	// - 192.0-100.0-3.8/19
+	ipRegex := `^(((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)|((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)-(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)))\.){3}((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)|((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)-(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?))(/([0-9]|1[0-9]|2[0-9]|3[0-2]))?)$`
+
+	// Match examples:
+	// - google.com
+	// - www.google.com
+	// - github.com/17
+	domainRegex := `^[a-zA-Z0-9][a-zA-Z0-9-_]{0,61}[a-zA-Z0-9]{0,1}\.([a-zA-Z]{1,6}|[a-zA-Z0-9-]{1,30}\.[a-zA-Z]{2,3})(/([0-9]|1[0-9]|2[0-9]|3[0-2]))?$`
 
 	ipMatched, err := regexp.MatchString(ipRegex, h)
 	if err != nil {
