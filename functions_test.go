@@ -124,3 +124,63 @@ func ExampleAggressiveScan() {
 	fmt.Println(out.Hosts[0].PortList.Port[0].ID)
 	// Output: 80
 }
+
+func ExampleSYNDiscovery() {
+	scan := NewScan()
+	_ = scan.AddHost("127.0.0.1")
+	_ = scan.AddPort(80)
+	_ = scan.SetPerformance(5)
+
+	out, err := scan.SYNDiscovery()
+	if err != nil {
+		return
+	}
+
+	fmt.Println(out.Hosts[0].PortList.Port[0].ID)
+	// Output: 80
+}
+
+func ExampleACKDiscovery() {
+	scan := NewScan()
+	_ = scan.AddHost("127.0.0.1")
+	_ = scan.AddPort(80)
+	_ = scan.SetPerformance(5)
+
+	out, err := scan.ACKDiscovery()
+	if err != nil {
+		return
+	}
+
+	fmt.Println(out.Hosts[0].PortList.Port[0].ID)
+	// Output: 80
+}
+
+func ExampleUDPDiscovery() {
+	scan := NewScan()
+	_ = scan.AddHost("127.0.0.1")
+	_ = scan.AddPort(80)
+	_ = scan.SetPerformance(5)
+
+	out, err := scan.UDPDiscovery()
+	if err != nil {
+		return
+	}
+
+	fmt.Println(out.Hosts[0].PortList.Port[0].ID)
+	// Output: 80
+}
+
+func ExampleSCTPDiscovery() {
+	scan := NewScan()
+	_ = scan.AddHost("127.0.0.1")
+	_ = scan.AddPort(80)
+	_ = scan.SetPerformance(5)
+
+	out, err := scan.SCTPDiscovery()
+	if err != nil {
+		return
+	}
+
+	fmt.Println(out.Hosts[0].PortList.Port[0].ID)
+	// Output: 80
+}

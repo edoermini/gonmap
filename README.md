@@ -54,6 +54,7 @@ func main() {
 - [type Address](<#type-address>)
 - [type Elem](<#type-elem>)
 - [type Host](<#type-host>)
+- [type HostDiscovery](<#type-hostdiscovery>)
 - [type HostStatus](<#type-hoststatus>)
 - [type NmapRun](<#type-nmaprun>)
 - [type OsInfo](<#type-osinfo>)
@@ -63,6 +64,7 @@ func main() {
 - [type PortState](<#type-portstate>)
 - [type Scan](<#type-scan>)
   - [func NewScan() Scan](<#func-newscan>)
+  - [func (s Scan) ACKDiscovery() (NmapRun, error)](<#func-scan-ackdiscovery>)
   - [func (s Scan) ACKScan() (NmapRun, error)](<#func-scan-ackscan>)
   - [func (s *Scan) AddHost(h string) error](<#func-scan-addhost>)
   - [func (s *Scan) AddHosts(hosts []string) error](<#func-scan-addhosts>)
@@ -87,16 +89,20 @@ func main() {
   - [func (s Scan) MaimonScan() (NmapRun, error)](<#func-scan-maimonscan>)
   - [func (s Scan) NULLScan() (NmapRun, error)](<#func-scan-nullscan>)
   - [func (s *Scan) RunScripts(choise bool)](<#func-scan-runscripts>)
+  - [func (s Scan) SCTPDiscovery() (NmapRun, error)](<#func-scan-sctpdiscovery>)
+  - [func (s Scan) SYNDiscovery() (NmapRun, error)](<#func-scan-syndiscovery>)
   - [func (s Scan) SYNScan() (NmapRun, error)](<#func-scan-synscan>)
   - [func (s *Scan) SetOsDetection(choise bool)](<#func-scan-setosdetection>)
   - [func (s *Scan) SetPerformance(performance int) error](<#func-scan-setperformance>)
   - [func (s *Scan) SetVersionScan(choise bool)](<#func-scan-setversionscan>)
   - [func (s Scan) String() string](<#func-scan-string>)
   - [func (s Scan) TCPScan() (NmapRun, error)](<#func-scan-tcpscan>)
+  - [func (s Scan) UDPDiscovery() (NmapRun, error)](<#func-scan-udpdiscovery>)
   - [func (s Scan) UDPScan() (NmapRun, error)](<#func-scan-udpscan>)
   - [func (s Scan) WindowScan() (NmapRun, error)](<#func-scan-windowscan>)
   - [func (s Scan) XmasScan() (NmapRun, error)](<#func-scan-xmasscan>)
 - [type ScanInfo](<#type-scaninfo>)
+- [type ScanTecnique](<#type-scantecnique>)
 - [type Script](<#type-script>)
 - [type Service](<#type-service>)
 - [type Table](<#type-table>)
@@ -142,6 +148,19 @@ type Host struct {
     Address  Address    `xml:"address" json:"address"`
     PortList Port       `xml:"ports" json:"ports"`
     OsInfo   OsInfo     `xml:"os" json:"osinfo"`
+}
+```
+
+## type [HostDiscovery](<https://github.com/MrRadix/gonmap/blob/master/functions.go#L27-L32>)
+
+HostDiscovery contains all methods that implement an host discovery scan
+
+```go
+type HostDiscovery interface {
+    SYNDiscovery()
+    ACKDiscovery()
+    UDPDiscovery()
+    SCTPDiscovery()
 }
 ```
 
@@ -241,7 +260,15 @@ func NewScan() Scan
 
 NewScan returns a new Scan with default values
 
-### func \(Scan\) [ACKScan](<https://github.com/MrRadix/gonmap/blob/master/functions.go#L185>)
+### func \(Scan\) [ACKDiscovery](<https://github.com/MrRadix/gonmap/blob/master/functions.go#L378>)
+
+```go
+func (s Scan) ACKDiscovery() (NmapRun, error)
+```
+
+ACKDiscovery makes a TCP ACK discovery
+
+### func \(Scan\) [ACKScan](<https://github.com/MrRadix/gonmap/blob/master/functions.go#L207>)
 
 ```go
 func (s Scan) ACKScan() (NmapRun, error)
@@ -305,7 +332,7 @@ func (s *Scan) AddScripts(scripts []string) error
 
 AddScripts adds all given scripts to scan
 
-### func \(Scan\) [AggressiveScan](<https://github.com/MrRadix/gonmap/blob/master/functions.go#L330>)
+### func \(Scan\) [AggressiveScan](<https://github.com/MrRadix/gonmap/blob/master/functions.go#L352>)
 
 ```go
 func (s Scan) AggressiveScan() (NmapRun, error)
@@ -313,7 +340,7 @@ func (s Scan) AggressiveScan() (NmapRun, error)
 
 AggressiveScan makes a scan with version scan \(\-sV\)\, os detection \(\-O\)\, script scanning \(\-sC\) and traceroute
 
-### func \(Scan\) [FINScan](<https://github.com/MrRadix/gonmap/blob/master/functions.go#L199>)
+### func \(Scan\) [FINScan](<https://github.com/MrRadix/gonmap/blob/master/functions.go#L221>)
 
 ```go
 func (s Scan) FINScan() (NmapRun, error)
@@ -393,7 +420,7 @@ func (s Scan) HasScript(script string) bool
 
 HasScript checks if scan has given script
 
-### func \(Scan\) [IDLEScan](<https://github.com/MrRadix/gonmap/blob/master/functions.go#L274>)
+### func \(Scan\) [IDLEScan](<https://github.com/MrRadix/gonmap/blob/master/functions.go#L296>)
 
 ```go
 func (s Scan) IDLEScan(zombie string) (NmapRun, error)
@@ -409,7 +436,7 @@ func (s Scan) IsEqual(s1 Scan) bool
 
 IsEqual cheks if two scans are equal
 
-### func \(Scan\) [MaimonScan](<https://github.com/MrRadix/gonmap/blob/master/functions.go#L259>)
+### func \(Scan\) [MaimonScan](<https://github.com/MrRadix/gonmap/blob/master/functions.go#L281>)
 
 ```go
 func (s Scan) MaimonScan() (NmapRun, error)
@@ -417,7 +444,7 @@ func (s Scan) MaimonScan() (NmapRun, error)
 
 MaimonScan is exactly the same as NULL\, FIN\, and Xmas scan\, except that the probe is FIN/ACK\. Flag: \-sM
 
-### func \(Scan\) [NULLScan](<https://github.com/MrRadix/gonmap/blob/master/functions.go#L214>)
+### func \(Scan\) [NULLScan](<https://github.com/MrRadix/gonmap/blob/master/functions.go#L236>)
 
 ```go
 func (s Scan) NULLScan() (NmapRun, error)
@@ -433,7 +460,23 @@ func (s *Scan) RunScripts(choise bool)
 
 RunScripts sets scripts running if choise is true\. Setting this true without adding scripts it's equivalent to a scan with default scripts\. Flag: \-sC
 
-### func \(Scan\) [SYNScan](<https://github.com/MrRadix/gonmap/blob/master/functions.go#L170>)
+### func \(Scan\) [SCTPDiscovery](<https://github.com/MrRadix/gonmap/blob/master/functions.go#L404>)
+
+```go
+func (s Scan) SCTPDiscovery() (NmapRun, error)
+```
+
+SCTPDiscovery makes an SCTP discovery
+
+### func \(Scan\) [SYNDiscovery](<https://github.com/MrRadix/gonmap/blob/master/functions.go#L365>)
+
+```go
+func (s Scan) SYNDiscovery() (NmapRun, error)
+```
+
+SYNDiscovery makes a TCP SYN discovery
+
+### func \(Scan\) [SYNScan](<https://github.com/MrRadix/gonmap/blob/master/functions.go#L192>)
 
 ```go
 func (s Scan) SYNScan() (NmapRun, error)
@@ -471,7 +514,7 @@ SetVersionScan sets service version scan\. Nmap flag: \-sV
 func (s Scan) String() string
 ```
 
-### func \(Scan\) [TCPScan](<https://github.com/MrRadix/gonmap/blob/master/functions.go#L139>)
+### func \(Scan\) [TCPScan](<https://github.com/MrRadix/gonmap/blob/master/functions.go#L161>)
 
 ```go
 func (s Scan) TCPScan() (NmapRun, error)
@@ -479,7 +522,15 @@ func (s Scan) TCPScan() (NmapRun, error)
 
 TCPScan is generally used to check and complete a three\-way handshake between you and a chosen target system\. Flag: \-sT
 
-### func \(Scan\) [UDPScan](<https://github.com/MrRadix/gonmap/blob/master/functions.go#L155>)
+### func \(Scan\) [UDPDiscovery](<https://github.com/MrRadix/gonmap/blob/master/functions.go#L391>)
+
+```go
+func (s Scan) UDPDiscovery() (NmapRun, error)
+```
+
+UDPDiscovery makes an UDP discovery
+
+### func \(Scan\) [UDPScan](<https://github.com/MrRadix/gonmap/blob/master/functions.go#L177>)
 
 ```go
 func (s Scan) UDPScan() (NmapRun, error)
@@ -487,7 +538,7 @@ func (s Scan) UDPScan() (NmapRun, error)
 
 UDPScan are used to check whether there is any UDP port up and listening for incoming requests on the target machine\. Flag: \-sU
 
-### func \(Scan\) [WindowScan](<https://github.com/MrRadix/gonmap/blob/master/functions.go#L244>)
+### func \(Scan\) [WindowScan](<https://github.com/MrRadix/gonmap/blob/master/functions.go#L266>)
 
 ```go
 func (s Scan) WindowScan() (NmapRun, error)
@@ -495,7 +546,7 @@ func (s Scan) WindowScan() (NmapRun, error)
 
 WindowScan is exactly the same as ACK scan except that it exploits an implementation detail of certain systems to differentiate open ports from closed ones\, rather than always printing unfiltered when a RST is returned\. Flag: \-sW
 
-### func \(Scan\) [XmasScan](<https://github.com/MrRadix/gonmap/blob/master/functions.go#L228>)
+### func \(Scan\) [XmasScan](<https://github.com/MrRadix/gonmap/blob/master/functions.go#L250>)
 
 ```go
 func (s Scan) XmasScan() (NmapRun, error)
@@ -511,6 +562,25 @@ ScanInfo contains info about the scan
 type ScanInfo struct {
     Type     string `xml:"type,attr" json:"type"`
     Protocol string `xml:"protocol,attr" json:"protocol"`
+}
+```
+
+## type [ScanTecnique](<https://github.com/MrRadix/gonmap/blob/master/functions.go#L13-L24>)
+
+ScanTecnique contains all methods that implement a scan tecnique
+
+```go
+type ScanTecnique interface {
+    TCPScan()
+    UDPScan()
+    SYNScan()
+    ACKScan()
+    FINScan()
+    NULLScan()
+    XmasScan()
+    WindowScan()
+    MaimonScan()
+    IDLEScan()
 }
 ```
 

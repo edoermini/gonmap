@@ -9,6 +9,28 @@ import (
 	"strings"
 )
 
+// ScanTecnique contains all methods that implement a scan tecnique
+type ScanTecnique interface {
+	TCPScan()
+	UDPScan()
+	SYNScan()
+	ACKScan()
+	FINScan()
+	NULLScan()
+	XmasScan()
+	WindowScan()
+	MaimonScan()
+	IDLEScan()
+}
+
+// HostDiscovery contains all methods that implement an host discovery scan
+type HostDiscovery interface {
+	SYNDiscovery()
+	ACKDiscovery()
+	UDPDiscovery()
+	SCTPDiscovery()
+}
+
 type settings struct {
 	scanFlag    string
 	portsFlag   string
@@ -330,6 +352,58 @@ func (s Scan) IDLEScan(zombie string) (NmapRun, error) {
 func (s Scan) AggressiveScan() (NmapRun, error) {
 	config := getSettings(s)
 	config.scanFlag = "-A"
+
+	xml, err := runScan(config)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	return nmapXMLParse(xml), nil
+}
+
+// SYNDiscovery makes a TCP SYN discovery
+func (s Scan) SYNDiscovery() (NmapRun, error) {
+	config := getSettings(s)
+	config.scanFlag = "-PS"
+
+	xml, err := runScan(config)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	return nmapXMLParse(xml), nil
+}
+
+// ACKDiscovery makes a TCP ACK discovery
+func (s Scan) ACKDiscovery() (NmapRun, error) {
+	config := getSettings(s)
+	config.scanFlag = "-PA"
+
+	xml, err := runScan(config)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	return nmapXMLParse(xml), nil
+}
+
+// UDPDiscovery makes an UDP discovery
+func (s Scan) UDPDiscovery() (NmapRun, error) {
+	config := getSettings(s)
+	config.scanFlag = "-PU"
+
+	xml, err := runScan(config)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	return nmapXMLParse(xml), nil
+}
+
+// SCTPDiscovery makes an SCTP discovery
+func (s Scan) SCTPDiscovery() (NmapRun, error) {
+	config := getSettings(s)
+	config.scanFlag = "-PY"
 
 	xml, err := runScan(config)
 	if err != nil {
