@@ -44,13 +44,12 @@ func main() {
 		log.Fatal(err)
 	}
 
-	fmt.Println(out.Hosts[0].PortList.Port[0].ID)
+	fmt.Println(ret.Hosts[0].PortList.Port[0].ID)
 }
 ```
 
 ## Index
 
-- [func IsValidHost(h string) bool](<#func-isvalidhost>)
 - [type Address](<#type-address>)
 - [type Elem](<#type-elem>)
 - [type Host](<#type-host>)
@@ -73,6 +72,7 @@ func main() {
   - [func (s *Scan) AddPorts(ports []int) error](<#func-scan-addports>)
   - [func (s *Scan) AddScript(script string) error](<#func-scan-addscript>)
   - [func (s *Scan) AddScripts(scripts []string) error](<#func-scan-addscripts>)
+  - [func (s *Scan) AddTopPorts(n int) error](<#func-scan-addtopports>)
   - [func (s Scan) AggressiveScan() (NmapRun, error)](<#func-scan-aggressivescan>)
   - [func (s Scan) FINScan() (NmapRun, error)](<#func-scan-finscan>)
   - [func (s Scan) GetHosts() []string](<#func-scan-gethosts>)
@@ -108,26 +108,18 @@ func main() {
 - [type Table](<#type-table>)
 
 
-## func [IsValidHost](<https://github.com/MrRadix/gonmap/blob/master/aux.go#L11>)
-
-```go
-func IsValidHost(h string) bool
-```
-
-IsValidHost gets a string and returns true if string represents a valid host false otherwise\. Examples of valid hosts: 192\.168\.1\.0\, 192\.0\-100\.0\-3\.8\, 192\.168\.1\.0/24\, 192\.0\-100\.0\-3\.8/19\, 192\.0\-100\.0\-3\.8\,9\,10\,11/19 www\.google\.com\, github\.com/17
-
-## type [Address](<https://github.com/MrRadix/gonmap/blob/master/parser.go#L34-L37>)
+## type [Address](<https://github.com/MrRadix/gonmap/blob/master/parser.go#L36-L39>)
 
 Address contains info about address \(ipv4\, ipv6\)
 
 ```go
 type Address struct {
-    Addr string `xml:"addr,attr" json:"addr"`
-    Type string `xml:"addrtype,attr" json:"type"`
+    Value string `xml:"addr,attr" json:"value"`
+    Type  string `xml:"addrtype,attr" json:"type"`
 }
 ```
 
-## type [Elem](<https://github.com/MrRadix/gonmap/blob/master/parser.go#L91-L94>)
+## type [Elem](<https://github.com/MrRadix/gonmap/blob/master/parser.go#L93-L96>)
 
 Elem contains a part of script result
 
@@ -138,7 +130,7 @@ type Elem struct {
 }
 ```
 
-## type [Host](<https://github.com/MrRadix/gonmap/blob/master/parser.go#L20-L25>)
+## type [Host](<https://github.com/MrRadix/gonmap/blob/master/parser.go#L22-L27>)
 
 Host contains all info about a specific host
 
@@ -151,7 +143,7 @@ type Host struct {
 }
 ```
 
-## type [HostDiscovery](<https://github.com/MrRadix/gonmap/blob/master/functions.go#L27-L32>)
+## type [HostDiscovery](<https://github.com/MrRadix/gonmap/blob/master/functions.go#L32-L37>)
 
 HostDiscovery contains all methods that implement an host discovery scan
 
@@ -164,7 +156,7 @@ type HostDiscovery interface {
 }
 ```
 
-## type [HostStatus](<https://github.com/MrRadix/gonmap/blob/master/parser.go#L28-L31>)
+## type [HostStatus](<https://github.com/MrRadix/gonmap/blob/master/parser.go#L30-L33>)
 
 HostStatus contains status of specific host
 
@@ -186,7 +178,7 @@ type NmapRun struct {
 }
 ```
 
-## type [OsInfo](<https://github.com/MrRadix/gonmap/blob/master/parser.go#L66-L68>)
+## type [OsInfo](<https://github.com/MrRadix/gonmap/blob/master/parser.go#L68-L70>)
 
 OsInfo contains all os detection matches
 
@@ -196,7 +188,7 @@ type OsInfo struct {
 }
 ```
 
-## type [OsMatch](<https://github.com/MrRadix/gonmap/blob/master/parser.go#L71-L74>)
+## type [OsMatch](<https://github.com/MrRadix/gonmap/blob/master/parser.go#L73-L76>)
 
 OsMatch contains info about an os detection match
 
@@ -207,7 +199,7 @@ type OsMatch struct {
 }
 ```
 
-## type [Port](<https://github.com/MrRadix/gonmap/blob/master/parser.go#L40-L42>)
+## type [Port](<https://github.com/MrRadix/gonmap/blob/master/parser.go#L42-L44>)
 
 Port contains all port checked in scan
 
@@ -217,7 +209,7 @@ type Port struct {
 }
 ```
 
-## type [PortInfo](<https://github.com/MrRadix/gonmap/blob/master/parser.go#L45-L51>)
+## type [PortInfo](<https://github.com/MrRadix/gonmap/blob/master/parser.go#L47-L53>)
 
 PortInfo contains info about a specific port
 
@@ -231,7 +223,7 @@ type PortInfo struct {
 }
 ```
 
-## type [PortState](<https://github.com/MrRadix/gonmap/blob/master/parser.go#L54-L57>)
+## type [PortState](<https://github.com/MrRadix/gonmap/blob/master/parser.go#L56-L59>)
 
 PortState contains status of specific port
 
@@ -260,7 +252,7 @@ func NewScan() Scan
 
 NewScan returns a new Scan with default values
 
-### func \(Scan\) [ACKDiscovery](<https://github.com/MrRadix/gonmap/blob/master/functions.go#L378>)
+### func \(Scan\) [ACKDiscovery](<https://github.com/MrRadix/gonmap/blob/master/functions.go#L692>)
 
 ```go
 func (s Scan) ACKDiscovery() (NmapRun, error)
@@ -268,7 +260,7 @@ func (s Scan) ACKDiscovery() (NmapRun, error)
 
 ACKDiscovery makes a TCP ACK discovery
 
-### func \(Scan\) [ACKScan](<https://github.com/MrRadix/gonmap/blob/master/functions.go#L207>)
+### func \(Scan\) [ACKScan](<https://github.com/MrRadix/gonmap/blob/master/functions.go#L509>)
 
 ```go
 func (s Scan) ACKScan() (NmapRun, error)
@@ -300,7 +292,7 @@ func (s *Scan) AddPort(p int) error
 
 AddPort adds given port to scan if is a valid port and returns error otherwise
 
-### func \(\*Scan\) [AddPortRange](<https://github.com/MrRadix/gonmap/blob/master/scan.go#L137>)
+### func \(\*Scan\) [AddPortRange](<https://github.com/MrRadix/gonmap/blob/master/scan.go#L158>)
 
 ```go
 func (s *Scan) AddPortRange(min int, max int) error
@@ -308,7 +300,7 @@ func (s *Scan) AddPortRange(min int, max int) error
 
 AddPortRange adds ports from min to max if min and max are valid bounds and returns error otherwise
 
-### func \(\*Scan\) [AddPorts](<https://github.com/MrRadix/gonmap/blob/master/scan.go#L162>)
+### func \(\*Scan\) [AddPorts](<https://github.com/MrRadix/gonmap/blob/master/scan.go#L183>)
 
 ```go
 func (s *Scan) AddPorts(ports []int) error
@@ -316,7 +308,7 @@ func (s *Scan) AddPorts(ports []int) error
 
 AddPorts adds all given ports to scan if all ports are valid and returns error otherwise
 
-### func \(\*Scan\) [AddScript](<https://github.com/MrRadix/gonmap/blob/master/scan.go#L204>)
+### func \(\*Scan\) [AddScript](<https://github.com/MrRadix/gonmap/blob/master/scan.go#L225>)
 
 ```go
 func (s *Scan) AddScript(script string) error
@@ -324,7 +316,7 @@ func (s *Scan) AddScript(script string) error
 
 AddScript adds given script to scan
 
-### func \(\*Scan\) [AddScripts](<https://github.com/MrRadix/gonmap/blob/master/scan.go#L216>)
+### func \(\*Scan\) [AddScripts](<https://github.com/MrRadix/gonmap/blob/master/scan.go#L237>)
 
 ```go
 func (s *Scan) AddScripts(scripts []string) error
@@ -332,7 +324,15 @@ func (s *Scan) AddScripts(scripts []string) error
 
 AddScripts adds all given scripts to scan
 
-### func \(Scan\) [AggressiveScan](<https://github.com/MrRadix/gonmap/blob/master/functions.go#L352>)
+### func \(\*Scan\) [AddTopPorts](<https://github.com/MrRadix/gonmap/blob/master/scan.go#L136>)
+
+```go
+func (s *Scan) AddTopPorts(n int) error
+```
+
+AddTopPorts adds top n ports to scan
+
+### func \(Scan\) [AggressiveScan](<https://github.com/MrRadix/gonmap/blob/master/functions.go#L654>)
 
 ```go
 func (s Scan) AggressiveScan() (NmapRun, error)
@@ -340,7 +340,7 @@ func (s Scan) AggressiveScan() (NmapRun, error)
 
 AggressiveScan makes a scan with version scan \(\-sV\)\, os detection \(\-O\)\, script scanning \(\-sC\) and traceroute
 
-### func \(Scan\) [FINScan](<https://github.com/MrRadix/gonmap/blob/master/functions.go#L221>)
+### func \(Scan\) [FINScan](<https://github.com/MrRadix/gonmap/blob/master/functions.go#L528>)
 
 ```go
 func (s Scan) FINScan() (NmapRun, error)
@@ -348,7 +348,7 @@ func (s Scan) FINScan() (NmapRun, error)
 
 FINScan is like SYN scan\, but sends a TCP FIN packet instead\. Flag: \-sF
 
-### func \(Scan\) [GetHosts](<https://github.com/MrRadix/gonmap/blob/master/scan.go#L242>)
+### func \(Scan\) [GetHosts](<https://github.com/MrRadix/gonmap/blob/master/scan.go#L263>)
 
 ```go
 func (s Scan) GetHosts() []string
@@ -356,7 +356,7 @@ func (s Scan) GetHosts() []string
 
 GetHosts returns hosts set
 
-### func \(Scan\) [GetOsDetection](<https://github.com/MrRadix/gonmap/blob/master/scan.go#L271>)
+### func \(Scan\) [GetOsDetection](<https://github.com/MrRadix/gonmap/blob/master/scan.go#L292>)
 
 ```go
 func (s Scan) GetOsDetection() bool
@@ -364,7 +364,7 @@ func (s Scan) GetOsDetection() bool
 
 GetOsDetection returns os detection choise
 
-### func \(Scan\) [GetPerformance](<https://github.com/MrRadix/gonmap/blob/master/scan.go#L266>)
+### func \(Scan\) [GetPerformance](<https://github.com/MrRadix/gonmap/blob/master/scan.go#L287>)
 
 ```go
 func (s Scan) GetPerformance() int
@@ -372,7 +372,7 @@ func (s Scan) GetPerformance() int
 
 GetPerformance returns performance
 
-### func \(Scan\) [GetPorts](<https://github.com/MrRadix/gonmap/blob/master/scan.go#L250>)
+### func \(Scan\) [GetPorts](<https://github.com/MrRadix/gonmap/blob/master/scan.go#L271>)
 
 ```go
 func (s Scan) GetPorts() []int
@@ -380,7 +380,7 @@ func (s Scan) GetPorts() []int
 
 GetPorts returns ports set
 
-### func \(Scan\) [GetRunScript](<https://github.com/MrRadix/gonmap/blob/master/scan.go#L276>)
+### func \(Scan\) [GetRunScript](<https://github.com/MrRadix/gonmap/blob/master/scan.go#L297>)
 
 ```go
 func (s Scan) GetRunScript() bool
@@ -388,7 +388,7 @@ func (s Scan) GetRunScript() bool
 
 GetRunScript returns script running choise
 
-### func \(Scan\) [GetScripts](<https://github.com/MrRadix/gonmap/blob/master/scan.go#L258>)
+### func \(Scan\) [GetScripts](<https://github.com/MrRadix/gonmap/blob/master/scan.go#L279>)
 
 ```go
 func (s Scan) GetScripts() []string
@@ -420,15 +420,15 @@ func (s Scan) HasScript(script string) bool
 
 HasScript checks if scan has given script
 
-### func \(Scan\) [IDLEScan](<https://github.com/MrRadix/gonmap/blob/master/functions.go#L296>)
+### func \(Scan\) [IDLEScan](<https://github.com/MrRadix/gonmap/blob/master/functions.go#L630>)
 
 ```go
 func (s Scan) IDLEScan(zombie string) (NmapRun, error)
 ```
 
-IDLEScan is the stealthiest of all scans as the packets are bounced off an external host\. Flag: \-sI
+IDLEScan is the stealthiest of all scans as the packets are bounced off an external host\. Flag: \-sI IDLEScan is the stealthiest of all scans as the packets are bounced off an external host\. Flag: \-sI
 
-### func \(Scan\) [IsEqual](<https://github.com/MrRadix/gonmap/blob/master/scan.go#L285>)
+### func \(Scan\) [IsEqual](<https://github.com/MrRadix/gonmap/blob/master/scan.go#L306>)
 
 ```go
 func (s Scan) IsEqual(s1 Scan) bool
@@ -436,7 +436,7 @@ func (s Scan) IsEqual(s1 Scan) bool
 
 IsEqual cheks if two scans are equal
 
-### func \(Scan\) [MaimonScan](<https://github.com/MrRadix/gonmap/blob/master/functions.go#L281>)
+### func \(Scan\) [MaimonScan](<https://github.com/MrRadix/gonmap/blob/master/functions.go#L608>)
 
 ```go
 func (s Scan) MaimonScan() (NmapRun, error)
@@ -444,7 +444,7 @@ func (s Scan) MaimonScan() (NmapRun, error)
 
 MaimonScan is exactly the same as NULL\, FIN\, and Xmas scan\, except that the probe is FIN/ACK\. Flag: \-sM
 
-### func \(Scan\) [NULLScan](<https://github.com/MrRadix/gonmap/blob/master/functions.go#L236>)
+### func \(Scan\) [NULLScan](<https://github.com/MrRadix/gonmap/blob/master/functions.go#L548>)
 
 ```go
 func (s Scan) NULLScan() (NmapRun, error)
@@ -452,7 +452,7 @@ func (s Scan) NULLScan() (NmapRun, error)
 
 NULLScan are extremely stealthy scan and what they do is as the name suggests — they set all the header fields to null\. Flag: \-sN
 
-### func \(\*Scan\) [RunScripts](<https://github.com/MrRadix/gonmap/blob/master/scan.go#L237>)
+### func \(\*Scan\) [RunScripts](<https://github.com/MrRadix/gonmap/blob/master/scan.go#L258>)
 
 ```go
 func (s *Scan) RunScripts(choise bool)
@@ -460,7 +460,7 @@ func (s *Scan) RunScripts(choise bool)
 
 RunScripts sets scripts running if choise is true\. Setting this true without adding scripts it's equivalent to a scan with default scripts\. Flag: \-sC
 
-### func \(Scan\) [SCTPDiscovery](<https://github.com/MrRadix/gonmap/blob/master/functions.go#L404>)
+### func \(Scan\) [SCTPDiscovery](<https://github.com/MrRadix/gonmap/blob/master/functions.go#L730>)
 
 ```go
 func (s Scan) SCTPDiscovery() (NmapRun, error)
@@ -468,7 +468,7 @@ func (s Scan) SCTPDiscovery() (NmapRun, error)
 
 SCTPDiscovery makes an SCTP discovery
 
-### func \(Scan\) [SYNDiscovery](<https://github.com/MrRadix/gonmap/blob/master/functions.go#L365>)
+### func \(Scan\) [SYNDiscovery](<https://github.com/MrRadix/gonmap/blob/master/functions.go#L673>)
 
 ```go
 func (s Scan) SYNDiscovery() (NmapRun, error)
@@ -476,7 +476,7 @@ func (s Scan) SYNDiscovery() (NmapRun, error)
 
 SYNDiscovery makes a TCP SYN discovery
 
-### func \(Scan\) [SYNScan](<https://github.com/MrRadix/gonmap/blob/master/functions.go#L192>)
+### func \(Scan\) [SYNScan](<https://github.com/MrRadix/gonmap/blob/master/functions.go#L489>)
 
 ```go
 func (s Scan) SYNScan() (NmapRun, error)
@@ -484,7 +484,7 @@ func (s Scan) SYNScan() (NmapRun, error)
 
 SYNScan is another form of TCP scan\. The difference is unlike a normal TCP scan\, nmap itself crafts a syn packet\, which is the first packet that is sent to establish a TCP connection\. Flag: \-sS
 
-### func \(\*Scan\) [SetOsDetection](<https://github.com/MrRadix/gonmap/blob/master/scan.go#L199>)
+### func \(\*Scan\) [SetOsDetection](<https://github.com/MrRadix/gonmap/blob/master/scan.go#L220>)
 
 ```go
 func (s *Scan) SetOsDetection(choise bool)
@@ -492,7 +492,7 @@ func (s *Scan) SetOsDetection(choise bool)
 
 SetOsDetection sets operative system detection flag if choise is true\. Nmap flag: \-O
 
-### func \(\*Scan\) [SetPerformance](<https://github.com/MrRadix/gonmap/blob/master/scan.go#L184>)
+### func \(\*Scan\) [SetPerformance](<https://github.com/MrRadix/gonmap/blob/master/scan.go#L205>)
 
 ```go
 func (s *Scan) SetPerformance(performance int) error
@@ -500,7 +500,7 @@ func (s *Scan) SetPerformance(performance int) error
 
 SetPerformance sets scan performance if performance parameter is an integer between 0 and 5
 
-### func \(\*Scan\) [SetVersionScan](<https://github.com/MrRadix/gonmap/blob/master/scan.go#L194>)
+### func \(\*Scan\) [SetVersionScan](<https://github.com/MrRadix/gonmap/blob/master/scan.go#L215>)
 
 ```go
 func (s *Scan) SetVersionScan(choise bool)
@@ -508,13 +508,13 @@ func (s *Scan) SetVersionScan(choise bool)
 
 SetVersionScan sets service version scan\. Nmap flag: \-sV
 
-### func \(Scan\) [String](<https://github.com/MrRadix/gonmap/blob/master/scan.go#L280>)
+### func \(Scan\) [String](<https://github.com/MrRadix/gonmap/blob/master/scan.go#L301>)
 
 ```go
 func (s Scan) String() string
 ```
 
-### func \(Scan\) [TCPScan](<https://github.com/MrRadix/gonmap/blob/master/functions.go#L161>)
+### func \(Scan\) [TCPScan](<https://github.com/MrRadix/gonmap/blob/master/functions.go#L448>)
 
 ```go
 func (s Scan) TCPScan() (NmapRun, error)
@@ -522,7 +522,7 @@ func (s Scan) TCPScan() (NmapRun, error)
 
 TCPScan is generally used to check and complete a three\-way handshake between you and a chosen target system\. Flag: \-sT
 
-### func \(Scan\) [UDPDiscovery](<https://github.com/MrRadix/gonmap/blob/master/functions.go#L391>)
+### func \(Scan\) [UDPDiscovery](<https://github.com/MrRadix/gonmap/blob/master/functions.go#L711>)
 
 ```go
 func (s Scan) UDPDiscovery() (NmapRun, error)
@@ -530,7 +530,7 @@ func (s Scan) UDPDiscovery() (NmapRun, error)
 
 UDPDiscovery makes an UDP discovery
 
-### func \(Scan\) [UDPScan](<https://github.com/MrRadix/gonmap/blob/master/functions.go#L177>)
+### func \(Scan\) [UDPScan](<https://github.com/MrRadix/gonmap/blob/master/functions.go#L469>)
 
 ```go
 func (s Scan) UDPScan() (NmapRun, error)
@@ -538,7 +538,7 @@ func (s Scan) UDPScan() (NmapRun, error)
 
 UDPScan are used to check whether there is any UDP port up and listening for incoming requests on the target machine\. Flag: \-sU
 
-### func \(Scan\) [WindowScan](<https://github.com/MrRadix/gonmap/blob/master/functions.go#L266>)
+### func \(Scan\) [WindowScan](<https://github.com/MrRadix/gonmap/blob/master/functions.go#L588>)
 
 ```go
 func (s Scan) WindowScan() (NmapRun, error)
@@ -546,7 +546,7 @@ func (s Scan) WindowScan() (NmapRun, error)
 
 WindowScan is exactly the same as ACK scan except that it exploits an implementation detail of certain systems to differentiate open ports from closed ones\, rather than always printing unfiltered when a RST is returned\. Flag: \-sW
 
-### func \(Scan\) [XmasScan](<https://github.com/MrRadix/gonmap/blob/master/functions.go#L250>)
+### func \(Scan\) [XmasScan](<https://github.com/MrRadix/gonmap/blob/master/functions.go#L567>)
 
 ```go
 func (s Scan) XmasScan() (NmapRun, error)
@@ -554,18 +554,20 @@ func (s Scan) XmasScan() (NmapRun, error)
 
 XmasScan is just like null scans\, these are also stealthy in nature\. Flag \-sX
 
-## type [ScanInfo](<https://github.com/MrRadix/gonmap/blob/master/parser.go#L14-L17>)
+## type [ScanInfo](<https://github.com/MrRadix/gonmap/blob/master/parser.go#L14-L19>)
 
 ScanInfo contains info about the scan
 
 ```go
 type ScanInfo struct {
-    Type     string `xml:"type,attr" json:"type"`
-    Protocol string `xml:"protocol,attr" json:"protocol"`
+    Type        string `xml:"type,attr" json:"type"`
+    Protocol    string `xml:"protocol,attr" json:"protocol"`
+    Services    string `xml:"services,attr" json:"services"`
+    NumServices int    `xml:"numservices,attr" json:"numservices"`
 }
 ```
 
-## type [ScanTecnique](<https://github.com/MrRadix/gonmap/blob/master/functions.go#L13-L24>)
+## type [ScanTecnique](<https://github.com/MrRadix/gonmap/blob/master/functions.go#L18-L29>)
 
 ScanTecnique contains all methods that implement a scan tecnique
 
@@ -584,7 +586,7 @@ type ScanTecnique interface {
 }
 ```
 
-## type [Script](<https://github.com/MrRadix/gonmap/blob/master/parser.go#L77-L82>)
+## type [Script](<https://github.com/MrRadix/gonmap/blob/master/parser.go#L79-L84>)
 
 Script contains info about a specific script launched against a specific port
 
@@ -597,7 +599,7 @@ type Script struct {
 }
 ```
 
-## type [Service](<https://github.com/MrRadix/gonmap/blob/master/parser.go#L60-L63>)
+## type [Service](<https://github.com/MrRadix/gonmap/blob/master/parser.go#L62-L65>)
 
 Service contains info about service served in a specific port
 
@@ -608,7 +610,7 @@ type Service struct {
 }
 ```
 
-## type [Table](<https://github.com/MrRadix/gonmap/blob/master/parser.go#L85-L88>)
+## type [Table](<https://github.com/MrRadix/gonmap/blob/master/parser.go#L87-L90>)
 
 Table contains a group of elems of a specific script
 
