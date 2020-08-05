@@ -46,7 +46,7 @@ func (s Scan) HasPort(p int) bool {
 // HasHost checks if scan has given host
 func (s Scan) HasHost(h string) bool {
 
-	if !IsValidHost(h) {
+	if !isValidHost(h) {
 		return false
 	}
 
@@ -83,7 +83,7 @@ func (s *Scan) AddHost(h string) error {
 		return errors.New("Parameter must be a created Host")
 	}
 
-	if !IsValidHost(h) {
+	if !isValidHost(h) {
 		return errors.New("Parameter must be a valid Host")
 
 	}
@@ -104,7 +104,7 @@ func (s *Scan) AddHosts(hosts []string) error {
 	}
 
 	for _, h := range hosts {
-		if !IsValidHost(h) {
+		if !isValidHost(h) {
 			return errors.New("Hosts mus be all valid")
 		}
 	}
@@ -128,6 +128,27 @@ func (s *Scan) AddPort(p int) error {
 	if !s.HasPort(p) {
 		s.ports = append(s.ports, p)
 	}
+
+	return nil
+}
+
+// AddTopPorts adds top n ports to scan
+func (s *Scan) AddTopPorts(n int) error {
+	if n <= 0 {
+		return errors.New("Parameter should be an integer 1 or greater")
+	}
+
+	if n > 65536 {
+		return errors.New("Parameter is too large")
+	}
+
+	ports, err := getTopPorts(n)
+	if err != nil {
+		return err
+	}
+
+	s.ports = nil
+	s.AddPorts(ports)
 
 	return nil
 }

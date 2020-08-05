@@ -61,3 +61,20 @@ func TestAddHost(t *testing.T) {
 		}
 	}
 }
+
+func TestAddTopPorts(t *testing.T) {
+	scan := NewScan()
+
+	testSet := []int{
+		10,
+		20,
+	}
+
+	for _, v := range testSet {
+		scan.AddTopPorts(v)
+
+		if len(scan.ports) != v {
+			t.Errorf("Test: %d, expected: %d, got: %d", v, v, len(scan.ports))
+		}
+	}
+}

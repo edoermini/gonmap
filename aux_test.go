@@ -26,7 +26,7 @@ func TestIsValidHost(t *testing.T) {
 	}
 
 	for test, expected := range testSet {
-		result = IsValidHost(test)
+		result = isValidHost(test)
 		if result != expected {
 			t.Errorf("Test: %s, expected: %t, got: %t", test, expected, result)
 		}

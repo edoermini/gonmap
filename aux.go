@@ -5,10 +5,10 @@ import (
 	"regexp"
 )
 
-// IsValidHost gets a string and returns true if
+// Gets a string and returns true if
 // string represents a valid host false otherwise.
 // Examples of valid hosts: 192.168.1.0, 192.0-100.0-3.8, 192.168.1.0/24, 192.0-100.0-3.8/19, 192.0-100.0-3.8,9,10,11/19, www.google.com, github.com/17
-func IsValidHost(h string) bool {
+func isValidHost(h string) bool {
 
 	// Match examples:
 	// - 192.168.1.0
@@ -36,4 +36,12 @@ func IsValidHost(h string) bool {
 	}
 
 	return (ipMatched || domainMatched)
+}
+
+func chunkBy(items []int, chunkSize int) (chunks [][]int) {
+	for chunkSize < len(items) {
+		items, chunks = items[chunkSize:], append(chunks, items[0:chunkSize])
+	}
+
+	return append(chunks, items)
 }

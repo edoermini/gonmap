@@ -12,8 +12,10 @@ type NmapRun struct {
 
 // ScanInfo contains info about the scan
 type ScanInfo struct {
-	Type     string `xml:"type,attr" json:"type"`
-	Protocol string `xml:"protocol,attr" json:"protocol"`
+	Type        string `xml:"type,attr" json:"type"`
+	Protocol    string `xml:"protocol,attr" json:"protocol"`
+	Services    string `xml:"services,attr" json:"services"`
+	NumServices int    `xml:"numservices,attr" json:"numservices"`
 }
 
 // Host contains all info about a specific host
@@ -32,8 +34,8 @@ type HostStatus struct {
 
 // Address contains info about address (ipv4, ipv6)
 type Address struct {
-	Addr string `xml:"addr,attr" json:"addr"`
-	Type string `xml:"addrtype,attr" json:"type"`
+	Value string `xml:"addr,attr" json:"value"`
+	Type  string `xml:"addrtype,attr" json:"type"`
 }
 
 // Port contains all port checked in scan
