@@ -625,8 +625,6 @@ func (s Scan) MaimonScan() (NmapRun, error) {
 
 // IDLEScan is the stealthiest of all scans as the packets are bounced off an external host.
 // Flag: -sI
-// IDLEScan is the stealthiest of all scans as the packets are bounced off an external host.
-// Flag: -sI
 func (s Scan) IDLEScan(zombie string) (NmapRun, error) {
 
 	if !isValidHost(zombie) {
