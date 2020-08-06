@@ -252,7 +252,7 @@ func NewScan() Scan
 
 NewScan returns a new Scan with default values
 
-### func \(Scan\) [ACKDiscovery](<https://github.com/MrRadix/gonmap/blob/master/functions.go#L692>)
+### func \(Scan\) [ACKDiscovery](<https://github.com/MrRadix/gonmap/blob/master/functions.go#L690>)
 
 ```go
 func (s Scan) ACKDiscovery() (NmapRun, error)
@@ -332,7 +332,7 @@ func (s *Scan) AddTopPorts(n int) error
 
 AddTopPorts adds top n ports to scan
 
-### func \(Scan\) [AggressiveScan](<https://github.com/MrRadix/gonmap/blob/master/functions.go#L654>)
+### func \(Scan\) [AggressiveScan](<https://github.com/MrRadix/gonmap/blob/master/functions.go#L652>)
 
 ```go
 func (s Scan) AggressiveScan() (NmapRun, error)
@@ -420,13 +420,13 @@ func (s Scan) HasScript(script string) bool
 
 HasScript checks if scan has given script
 
-### func \(Scan\) [IDLEScan](<https://github.com/MrRadix/gonmap/blob/master/functions.go#L630>)
+### func \(Scan\) [IDLEScan](<https://github.com/MrRadix/gonmap/blob/master/functions.go#L628>)
 
 ```go
 func (s Scan) IDLEScan(zombie string) (NmapRun, error)
 ```
 
-IDLEScan is the stealthiest of all scans as the packets are bounced off an external host\. Flag: \-sI IDLEScan is the stealthiest of all scans as the packets are bounced off an external host\. Flag: \-sI
+IDLEScan is the stealthiest of all scans as the packets are bounced off an external host\. Flag: \-sI
 
 ### func \(Scan\) [IsEqual](<https://github.com/MrRadix/gonmap/blob/master/scan.go#L306>)
 
@@ -460,7 +460,7 @@ func (s *Scan) RunScripts(choise bool)
 
 RunScripts sets scripts running if choise is true\. Setting this true without adding scripts it's equivalent to a scan with default scripts\. Flag: \-sC
 
-### func \(Scan\) [SCTPDiscovery](<https://github.com/MrRadix/gonmap/blob/master/functions.go#L730>)
+### func \(Scan\) [SCTPDiscovery](<https://github.com/MrRadix/gonmap/blob/master/functions.go#L728>)
 
 ```go
 func (s Scan) SCTPDiscovery() (NmapRun, error)
@@ -468,7 +468,7 @@ func (s Scan) SCTPDiscovery() (NmapRun, error)
 
 SCTPDiscovery makes an SCTP discovery
 
-### func \(Scan\) [SYNDiscovery](<https://github.com/MrRadix/gonmap/blob/master/functions.go#L673>)
+### func \(Scan\) [SYNDiscovery](<https://github.com/MrRadix/gonmap/blob/master/functions.go#L671>)
 
 ```go
 func (s Scan) SYNDiscovery() (NmapRun, error)
@@ -522,7 +522,7 @@ func (s Scan) TCPScan() (NmapRun, error)
 
 TCPScan is generally used to check and complete a three\-way handshake between you and a chosen target system\. Flag: \-sT
 
-### func \(Scan\) [UDPDiscovery](<https://github.com/MrRadix/gonmap/blob/master/functions.go#L711>)
+### func \(Scan\) [UDPDiscovery](<https://github.com/MrRadix/gonmap/blob/master/functions.go#L709>)
 
 ```go
 func (s Scan) UDPDiscovery() (NmapRun, error)
