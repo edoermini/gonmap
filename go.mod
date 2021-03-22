@@ -1,3 +1,3 @@
-module github.com/MrRadix/gonmap
+module github.com/edoermini/gonmap
 
 go 1.13
