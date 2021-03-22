@@ -15,7 +15,7 @@ A simple main example:
 		"log"
 		"fmt"
 
-		gonmap "github.com/MrRadix/gonmap"
+		gonmap "github.com/edoermini/gonmap"
 	)
 
 	func main() {
