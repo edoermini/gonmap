@@ -3,7 +3,7 @@
 # gonmap
 
 ```go
-import "github.com/MrRadix/gonmap"
+import "github.com/edoermini/gonmap"
 ```
 
 ### Package gonmap provides an efficient and simple API for nmap
@@ -25,7 +25,7 @@ import (
 	"log"
 	"fmt"
 
-	gonmap "github.com/MrRadix/gonmap"
+	gonmap "github.com/edoermini/gonmap"
 )
 
 func main() {
